@@ -37,18 +37,19 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>295</x>
+      <x>290</x>
       <y>120</y>
-      <w>230</w>
-      <h>230</h>
+      <w>235</w>
+      <h>235</h>
     </coordinates>
     <panel_attributes>&lt;&lt;Editeur de Générateur à 
 Nombres aléatoire&gt;&gt;
 EGNA
 --
 - graine : uint64_t
-- etat[2] : uint64_t
-- double moyenne, cv, uniformite, autoCorrelation, equilibleBits
+- etat[2], etatTmp[2] : uint64_t
+- histogramme : QVector&lt;unsigned int&gt;
+- moyenne, cv, autoCorrelation, equilibleBits : double
 --
 + EGNA(QVector&lt;Module*&gt; *)
 + ~EGNA()
@@ -89,7 +90,7 @@ m2=0..1</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>55</x>
+      <x>50</x>
       <y>155</y>
       <w>185</w>
       <h>170</h>
@@ -136,7 +137,7 @@ bg=blue</panel_attributes>
   <element>
     <id>UMLNote</id>
     <coordinates>
-      <x>50</x>
+      <x>45</x>
       <y>85</y>
       <w>75</w>
       <h>30</h>
@@ -150,7 +151,7 @@ bg=blue</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>235</x>
+      <x>230</x>
       <y>235</y>
       <w>70</w>
       <h>20</h>
@@ -162,7 +163,7 @@ Créé la Classe</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>80</x>
+      <x>75</x>
       <y>110</y>
       <w>15</w>
       <h>55</h>
@@ -173,7 +174,7 @@ Créé la Classe</panel_attributes>
   <element>
     <id>UMLNote</id>
     <coordinates>
-      <x>150</x>
+      <x>145</x>
       <y>75</y>
       <w>75</w>
       <h>50</h>
@@ -189,7 +190,7 @@ bg=blue</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>180</x>
+      <x>175</x>
       <y>120</y>
       <w>15</w>
       <h>45</h>
