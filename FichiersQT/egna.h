@@ -29,6 +29,7 @@ public:
     void renitialiserEtat();
     inline uint64_t avoirGraine() const {return graine;};
     inline void changerGraine(uint64_t graine_){graine = graine_;};
+    void changerGraine();
     inline void changerNbValeursTotale(int nbValeursTotale_){nbValeursTotale = nbValeursTotale_;};
 
     uint8_t suivantPixelBruit();

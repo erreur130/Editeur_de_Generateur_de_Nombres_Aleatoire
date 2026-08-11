@@ -206,7 +206,6 @@ void MainWindow::on_textGraine_editingFinished(){
     bool ok;
     uint64_t valeur = ui->textGraine->text().toULongLong(&ok, 16); // base 16 (hexadécimale)
     if (ok){
-        qDebug() << "Graine changer";
         editeur.changerGraine(valeur);
         // update
         miseAJourTout();
@@ -243,3 +242,10 @@ void MainWindow::recevoirSuprimerModule(int idOrigine, bool vientDeTemplate){
         miseAJourTout();
     }
 }
+void MainWindow::on_boutonChangerGraine_clicked(){
+    editeur.changerGraine();
+    // On met la nouvelle graine en visuel et le reste
+    ui->textGraine->setText("0x" + QString::number(editeur.avoirGraine(), 16)); // hexadécimale
+    miseAJourTout();
+}
+

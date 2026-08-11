@@ -3,12 +3,8 @@
 EGNA::EGNA(QVector<Module*> *modules_)
     : graine(uint64_t()), etat{uint64_t()}, etatTmp{uint64_t()}, modules(modules_), moyenne(0.0), M2(0.0), cv(0.0), histogramme(QVector<unsigned int>(100,0)), autoCorrelation(0.0), equilibreBits(0.0), nbValeursActuel(0.0), nbValeursTotale(0){
 
-    using namespace std::chrono;
-    time_point<system_clock> now = system_clock::now();
-    system_clock::duration temps = now.time_since_epoch();
-    // Conversion duration -> nanoseconds -> uint64_t
-    nanoseconds tempsNano = duration_cast<nanoseconds>(temps);
-    graine = static_cast<uint64_t>(tempsNano.count());
+
+    changerGraine(); // pour initialiser la graine
 }
 
 EGNA::~EGNA(){}
@@ -56,6 +52,15 @@ void EGNA::renitialiserEtat(){
     for (qsizetype indice = 0; indice < modules->size(); indice++){ // On parcourt tout les modules
         modules->at(indice)->valeurSuivante(etat);
     }
+}
+
+void EGNA::changerGraine(){
+    using namespace std::chrono;
+    time_point<system_clock> now = system_clock::now();
+    system_clock::duration temps = now.time_since_epoch();
+    // Conversion duration -> nanoseconds -> uint64_t
+    nanoseconds tempsNano = duration_cast<nanoseconds>(temps);
+    graine = static_cast<uint64_t>(tempsNano.count());
 }
 
 uint8_t EGNA::suivantPixelBruit(){

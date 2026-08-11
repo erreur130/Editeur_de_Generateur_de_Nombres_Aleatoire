@@ -37,6 +37,8 @@ private slots:
     void on_textGraine_editingFinished();
     void on_spinBoxResolution_editingFinished();
 
+    void on_boutonChangerGraine_clicked();
+
 public slots:
     void miseAJourTout();
     void recevoirNomClasse(QString);
