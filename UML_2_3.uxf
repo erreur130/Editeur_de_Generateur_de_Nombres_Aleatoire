@@ -5,9 +5,9 @@
     <id>UMLClass</id>
     <coordinates>
       <x>595</x>
-      <y>80</y>
+      <y>70</y>
       <w>285</w>
-      <h>180</h>
+      <h>190</h>
     </coordinates>
     <panel_attributes>MainWindow
 --
@@ -28,6 +28,7 @@
 - on_actionCharger_triggered()
 - on_spinBoxResolution_editingFinished()
 - on_textGraine_editingFinished()
+- on_boutonChangerGraine_clicked()
 
 + recevoirNomClasse(nomClasse : QString)
 + recevoirIdModule(idDansTemplate, idDansActif : int, vientDeTemplate : bool)
@@ -40,7 +41,7 @@
       <x>290</x>
       <y>120</y>
       <w>235</w>
-      <h>235</h>
+      <h>240</h>
     </coordinates>
     <panel_attributes>&lt;&lt;Editeur de Générateur à 
 Nombres aléatoire&gt;&gt;
@@ -59,6 +60,7 @@ EGNA
 + renitialiserEtat()
 + avoirGraine() : uint64_t
 + changerGraine(graine_ : uint64_t)
++ changerGraine()
 + changerNbValeursTotale(nbValeursTotale_ : int)
 + suivantPixelBruit() : uint8_t
 + avoirMoyenne() : double
