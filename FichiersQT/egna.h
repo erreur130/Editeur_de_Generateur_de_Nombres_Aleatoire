@@ -3,17 +3,20 @@
 
 #include "module.h"
 #include <QFile>
+#include <bit>
+#include <QVector>
 
 class EGNA{
     uint64_t graine;
     uint64_t etat[2];
+    uint64_t etatTmp[2];
     QVector<Module*> *modules;
     double moyenne;
     double M2; // somme des carrés des écarts (pour le calcule de CV)
     double cv;
-    double uniformite;
+    QVector<unsigned int> histogramme;
     double autoCorrelation;
-    double equilibleBits;
+    double equilibreBits;
     int nbValeursActuel;
     int nbValeursTotale;
 
@@ -31,9 +34,9 @@ public:
     uint8_t suivantPixelBruit();
     inline double avoirMoyenne() const {return moyenne;};
     double avoirCV() const;
-    inline double avoirUniformite() const {return uniformite;};
+    double avoirUniformite() const;
     inline double avoirAutocorrelation() const {return autoCorrelation;};
-    inline double avoirEquilibreBits() const {return equilibleBits;};
+    inline double avoirEquilibreBits() const {return equilibreBits;};
 
 private :
     void calculeMoyenne();

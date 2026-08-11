@@ -36,7 +36,7 @@ MainWindow::MainWindow(QWidget *parent)
     editeur.changerNbValeursTotale(ui->spinBoxResolution->value() * ui->spinBoxResolution->value());
 
     // On remplie la liste des templates
-    modulesParDefaut.push_back(new RotationBits(this, 5));
+    modulesParDefaut.push_back(new RotationBits(this, 63));
     modulesParDefaut.push_back(new RotationBits(this, 2)); // pour des tests
     /* ...----------------------------------------------------------------------------------------------------------------------------------------------------------*/
     afficherListeModules();
@@ -67,7 +67,7 @@ void MainWindow::afficherStats() const {
         ui->labelAquilibreBits->setText(QString::number(editeur.avoirEquilibreBits()*100.0));
         ui->labelMoyenne->setText(QString::number(editeur.avoirMoyenne()*100.0));
         ui->labelCV->setText(QString::number(editeur.avoirCV()*100.0));
-        ui->labelUniformite->setText(QString::number(editeur.avoirUniformite()*100.0));
+        ui->labelUniformite->setText(QString::number(editeur.avoirUniformite())); // pas de * 100.0 ici, la valeurest déjà bonne
         ui->labelCorrelation->setText(QString::number(editeur.avoirAutocorrelation()*100.0));
     }
 }

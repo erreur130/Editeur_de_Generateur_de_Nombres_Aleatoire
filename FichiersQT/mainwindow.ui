@@ -470,25 +470,6 @@
               </property>
              </widget>
             </item>
-            <item row="4" column="2">
-             <widget class="QLabel" name="label_19">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="layoutDirection">
-               <enum>Qt::LayoutDirection::LeftToRight</enum>
-              </property>
-              <property name="text">
-               <string>%</string>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignmentFlag::AlignCenter</set>
-              </property>
-             </widget>
-            </item>
             <item row="4" column="3">
              <widget class="QLabel" name="infoNbValeurs_7">
               <property name="sizePolicy">
@@ -504,7 +485,7 @@
                </size>
               </property>
               <property name="toolTip">
-               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;L'uniformité reprérente la répartition des valeurs sur la plage possible (0 à 4^64). Ici les coupures se feront à chaque 1% et on compte le nb valeurs dans ce cartier.&lt;/p&gt;&lt;p&gt;Cette valeur est représenté en %. 0% correspond à que toutes les valeurs se trouve dans le même cartier et 100% correspond au fait qu'il y ait autant de valeurs dans chaque cartier.&lt;/p&gt;&lt;p&gt;Ce qui fait que la valeur idéale est 100%.&lt;/p&gt;&lt;p&gt;Attention, cette valeur n'est pas totalement fiable suivant le nb de valeurs étudiées&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;L'uniformité représente la répartition des valeurs sur la plage possible (0 à 2^128). Ici les coupures se feront à chaque 1% et on compte le nb valeurs dans ce quartier.&lt;/p&gt;&lt;p&gt;Cette valeur est à l'échelle de la loi statistique du chi-carré. On à une constante de 123.2 qui est spécifique à nos 100 quartier.&lt;br/&gt;Si on est &amp;gt; 123.2 alors les valeurs sont mal réparties et si on est &amp;gt; 123.2 alors elles sont plutôt régulières.&lt;br/&gt;&lt;/p&gt;&lt;p&gt;Attention, cette valeur n'est pas totalement fiable suivant le nb de valeurs étudiées&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
               </property>
               <property name="styleSheet">
                <string notr="true">QLabel {
