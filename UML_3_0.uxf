@@ -41,7 +41,7 @@
       <x>290</x>
       <y>120</y>
       <w>235</w>
-      <h>240</h>
+      <h>225</h>
     </coordinates>
     <panel_attributes>&lt;&lt;Editeur de Générateur à 
 Nombres aléatoire&gt;&gt;
@@ -55,8 +55,6 @@ EGNA
 + EGNA(QVector&lt;Module*&gt; *)
 + ~EGNA()
 
-+ charger(nomFichier : QString) : bool
-+ sauvegarder(nomFichier : QString) : bool
 + renitialiserEtat()
 + avoirGraine() : uint64_t
 + changerGraine(graine_ : uint64_t)
@@ -92,7 +90,7 @@ m2=0..1</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>50</x>
+      <x>30</x>
       <y>155</y>
       <w>185</w>
       <h>170</h>
@@ -139,8 +137,8 @@ bg=blue</panel_attributes>
   <element>
     <id>UMLNote</id>
     <coordinates>
-      <x>45</x>
-      <y>85</y>
+      <x>25</x>
+      <y>90</y>
       <w>75</w>
       <h>30</h>
     </coordinates>
@@ -153,31 +151,31 @@ bg=blue</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>230</x>
+      <x>210</x>
       <y>235</y>
-      <w>70</w>
+      <w>90</w>
       <h>20</h>
     </coordinates>
     <panel_attributes>lt=&lt;..
-Créé la Classe</panel_attributes>
-    <additional_attributes>10.0;20.0;120.0;20.0</additional_attributes>
+Créé .cpp / .hpp</panel_attributes>
+    <additional_attributes>10.0;20.0;160.0;20.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>75</x>
-      <y>110</y>
+      <x>55</x>
+      <y>115</y>
       <w>15</w>
-      <h>55</h>
+      <h>50</h>
     </coordinates>
     <panel_attributes>lt=-</panel_attributes>
-    <additional_attributes>10.0;90.0;10.0;10.0</additional_attributes>
+    <additional_attributes>10.0;80.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>UMLNote</id>
     <coordinates>
-      <x>145</x>
-      <y>75</y>
+      <x>125</x>
+      <y>80</y>
       <w>75</w>
       <h>50</h>
     </coordinates>
@@ -192,13 +190,13 @@ bg=blue</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>175</x>
-      <y>120</y>
+      <x>155</x>
+      <y>125</y>
       <w>15</w>
-      <h>45</h>
+      <h>40</h>
     </coordinates>
     <panel_attributes>lt=-</panel_attributes>
-    <additional_attributes>10.0;70.0;10.0;10.0</additional_attributes>
+    <additional_attributes>10.0;60.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
@@ -216,19 +214,19 @@ bg=blue</panel_attributes>
     <coordinates>
       <x>695</x>
       <y>305</y>
-      <w>200</w>
+      <w>210</w>
       <h>80</h>
     </coordinates>
     <panel_attributes>Module
 --
 --
 + Module(parent : QObject*)
-+ ~Module()
+_+ charger(in : QDataStream, parent : QObject*) : Module*_
 /*+ valeurSuivant(val[2] : uint64_t)*/
 /*+ copie() : Module**/
 /*+ creerPanneauParametres() : QWidget**/
-/*+ sauvegarder(fichier : QFile)*/
-/*+ avoirNom() : QString*/
+/*+ sauvegarder(out : QDataStream)*/
+/*+ ecrireAlgo(out : QTextStream)*/
 </panel_attributes>
     <additional_attributes/>
   </element>
@@ -302,15 +300,16 @@ m2=0..1</panel_attributes>
     <id>UMLNote</id>
     <coordinates>
       <x>340</x>
-      <y>70</y>
+      <y>60</y>
       <w>90</w>
-      <h>45</h>
+      <h>55</h>
     </coordinates>
     <panel_attributes>Pour ne pas à corréler
 des chiffres trop grand,
 j'ai fait en sorte que
 dans ces cas là on parle
 en pourcentage
+(type double)
 bg=blue</panel_attributes>
     <additional_attributes/>
   </element>
@@ -331,18 +330,19 @@ bg=blue</panel_attributes>
       <x>50</x>
       <y>435</y>
       <w>225</w>
-      <h>105</h>
+      <h>115</h>
     </coordinates>
     <panel_attributes>RotationBits
 --
 - decalage : uint8_t
 --
 + RotationBits(parent : QObject*, decalage_ : uint8_t)
-+ ~RotationBits()
++ RotationBits(parent : QObject*, in : QDataStream)
 /+ valeurSuivant(val[2] : uint64_t)/
 /+ copie() : Module*/
 /+ creerPanneauParametres() : QWidget*/
-/+ sauvegarder(fichier : QFile)/
+/+ sauvegarder(out : QDataStream)/
+/+ ecrireAlgo(out : QTextStream)/
 /+ avoirNom() : QString/
 + changerDecalage()
 + avoirDecalage() : uint8_t</panel_attributes>
@@ -361,11 +361,12 @@ bg=blue</panel_attributes>
 - constante : uint64_t
 --
 + AdditionConstante(parent : QObject*, constante_ : uint64_t)
-+ ~AdditionConstante()
++ AdditionConstante(parent : QObject*, in : QDataStream)
 /+ valeurSuivant(val[2] : uint64_t)/
 /+ copie() : Module*/
 /+ creerPanneauParametres() : QWidget*/
-/+ sauvegarder(fichier : QFile)/
+/+ sauvegarder(out : QDataStream)/
+/+ ecrireAlgo(out : QTextStream)/
 /+ avoirNom() : QString/
 + changerConstante()
 + avoirConstante() : uint64_t</panel_attributes>
@@ -377,18 +378,19 @@ bg=blue</panel_attributes>
       <x>295</x>
       <y>435</y>
       <w>200</w>
-      <h>135</h>
+      <h>145</h>
     </coordinates>
     <panel_attributes>Xorshift
 --
 - a, b, c : unsigned char
 --
 + Xorshift(parent : QObject*, a_, b_, c_ : unsigned char)
-+ ~Xorshift()
++ Xorshift(parent : QObject*, in : QDataStream)
 /+ valeurSuivant(val[2] : uint64_t)/
 /+ copie() : Module*/
 /+ creerPanneauParametres() : QWidget*/
-/+ sauvegarder(fichier : QFile)/
+/+ sauvegarder(out : QDataStream)/
+/+ ecrireAlgo(out : QTextStream)/
 /+ avoirNom() : QString/
 + changerA()
 + changerB()
@@ -404,7 +406,7 @@ bg=blue</panel_attributes>
       <x>820</x>
       <y>600</y>
       <w>255</w>
-      <h>145</h>
+      <h>155</h>
     </coordinates>
     <panel_attributes>PCG
 --
@@ -412,11 +414,12 @@ bg=blue</panel_attributes>
 - permu : int
 --
 + PCG(parent : QObject*, mult_, incr_, mod_ : uint64_t, permu_ : int)
-+ ~PCG()
++ PCG(parent : QObject*, in : QDataStream)
 /+ valeurSuivant(val[2] : uint64_t)/
 /+ copie() : Module*/
 /+ creerPanneauParametres() : QWidget*/
-/+ sauvegarder(fichier : QFile)/
+/+ sauvegarder(out : QDataStream)/
+/+ ecrireAlgo(out : QTextStream)/
 /+ avoirNom() : QString/
 + changerMult()
 + changerIncr()
@@ -429,21 +432,22 @@ bg=blue</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>310</x>
+      <x>305</x>
       <y>595</y>
       <w>185</w>
-      <h>120</h>
+      <h>125</h>
     </coordinates>
     <panel_attributes>SplitMix64
 --
 - a, b : uint64_t
 --
 + SplitMix64(parent : QObject*, a_, b_ : uint64_t)
-+ ~SplitMix64()
++ SplitMix64(parent : QObject*, in : QDataStream)
 /+ valeurSuivant(val[2] : uint64_t)/
 /+ copie() : Module*/
 /+ creerPanneauParametres() : QWidget*/
-/+ sauvegarder(fichier : QFile)/
+/+ sauvegarder(out : QDataStream)/
+/+ ecrireAlgo(out : QTextStream)/
 /+ avoirNom() : QString/
 + changerA()
 + changerB()
@@ -464,11 +468,12 @@ bg=blue</panel_attributes>
 - mult, incr, mod : uint64_t
 --
 + LCG(parent : QObject*, mult_, incr_, mod_ : uint64_t)
-+ ~LCG()
++ LCG(parent : QObject*, in : QDataStream)
 /+ valeurSuivant(val[2] : uint64_t)/
 /+ copie() : Module*/
 /+ creerPanneauParametres() : QWidget*/
-/+ sauvegarder(fichier : QFile)/
+/+ sauvegarder(out : QDataStream)/
+/+ ecrireAlgo(out : QTextStream)/
 /+ avoirNom() : QString/
 + changerMult()
 + changerIncr()
@@ -491,11 +496,12 @@ bg=blue</panel_attributes>
 - constante : uint64_t
 --
 + AdditionConstante(parent : QObject*, constante_ : uint64_t)
-+ ~AdditionConstante()
++ AdditionConstante(parent : QObject*, in : QDataStream)
 /+ valeurSuivant(val[2] : uint64_t)/
 /+ copie() : Module*/
 /+ creerPanneauParametres() : QWidget*/
-/+ sauvegarder(fichier : QFile)/
+/+ sauvegarder(out : QDataStream)/
+/+ ecrireAlgo(out : QTextStream)/
 /+ avoirNom() : QString/
 + changerConstante()
 + avoirConstante() : uint64_t</panel_attributes>
@@ -701,7 +707,7 @@ m2=0..1</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>905</x>
+      <x>915</x>
       <y>275</y>
       <w>190</w>
       <h>75</h>
@@ -722,14 +728,14 @@ DemandeNomClasse
     <coordinates>
       <x>875</x>
       <y>245</y>
-      <w>145</w>
+      <w>155</w>
       <h>40</h>
     </coordinates>
     <panel_attributes>lt=&lt;..
 - fenetre : AideModules
 m1=1..1
 m2=0..1</panel_attributes>
-    <additional_attributes>10.0;20.0;240.0;20.0;240.0;60.0</additional_attributes>
+    <additional_attributes>10.0;20.0;260.0;20.0;260.0;60.0</additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>
@@ -832,5 +838,34 @@ ListeModulesTemplate
 via l'objet ui de type Ui
 </panel_attributes>
     <additional_attributes>10.0;20.0;310.0;20.0;310.0;120.0;380.0;120.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>185</x>
+      <y>340</y>
+      <w>145</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;..
+Créé un fichier .egna
+</panel_attributes>
+    <additional_attributes>10.0;30.0;270.0;30.0;270.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLPackage</id>
+    <coordinates>
+      <x>105</x>
+      <y>335</y>
+      <w>85</w>
+      <h>35</h>
+    </coordinates>
+    <panel_attributes>fichier.egna
+--
+Contient les modules
+actif d'un projet
+bg=gray
+fg=blue</panel_attributes>
+    <additional_attributes/>
   </element>
 </diagram>
