@@ -24,8 +24,6 @@ public:
     EGNA(QVector<Module*>*);
     ~EGNA();
 
-    bool charger(QString nomFichier);
-    bool sauvegarder(QString nomFichier) const;
     void renitialiserEtat();
     inline uint64_t avoirGraine() const {return graine;};
     inline void changerGraine(uint64_t graine_){graine = graine_;};

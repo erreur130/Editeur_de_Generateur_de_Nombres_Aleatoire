@@ -8,15 +8,17 @@
 #include <QFormLayout>
 #include <QFile>
 
+
 class Module : public QObject {
-    public:
-        explicit Module(QObject* parent);
-        ~Module();
-        virtual void valeurSuivante(uint64_t (&val)[2]) const = 0; // prend par référence
-        virtual Module* copie() const = 0;
-        virtual QWidget* creerPaneauParametres() = 0;
-        virtual void sauvegarder(QFile &) const = 0;
-        virtual QString avoirNom() const = 0;
+public:
+    explicit Module(QObject* parent);
+    virtual void valeurSuivante(uint64_t (&val)[2]) const = 0; // prend par référence
+    virtual Module* copie() const = 0;
+    virtual QWidget* creerPaneauParametres() = 0;
+    virtual void sauvegarder(QDataStream &) const = 0;
+    virtual void ecrireAlgo(QTextStream &) const = 0;
+
+    static Module* charger(QDataStream & in, QObject* parent);
 };
 
 #endif // MODULE_H

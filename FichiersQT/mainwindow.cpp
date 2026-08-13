@@ -181,15 +181,30 @@ void MainWindow::on_actionCharger_triggered(){
         0,
         "Gestionaire des fichiers",
         "/home",
-        "Fichiers spéciaux (*.txt)"); // format txt à modifier si nésésaire ----------------------------------------------------------------------------------------------
+        "Fichiers EGNA (*.egna)");
 
     if(nomFichier != ""){ // Si il existe on charge les données, puis le visuel
-        editeur.charger(nomFichier);
+        /* -------------------------------------------- chargement ---------------------------------------------------------------- */
+        QFile fichier(nomFichier);
+        if(not(fichier.open(QFile::ReadOnly | QFile::Text))){ // Si on arrive pas à ouvrir
+            qDebug() << "Erreur" << fichier.errorString() << " -> " << nomFichier;
+            return;
+        }
+
+        modulesActif->clear();
+        QDataStream in(&fichier); // fait une référence au fichier et permet de le manipuler comme un flux
+
+        while (not(in.atEnd())){
+            Module* module = Module::charger(in, this); // charger() fait le new
+            if (module != nullptr)
+                modulesActif->push_back(module);
+        }
+
+        fichier.close();
 
         // update
         miseAJourMethodesActives();
-        afficherBruit();
-        afficherStats();
+        miseAJourTout();
     }
 }
 
@@ -217,8 +232,51 @@ void MainWindow::on_textGraine_editingFinished(){
 //------------------------------------- public slots -------------------------------------------------
 
 void MainWindow::recevoirNomClasse(QString nomClasse){
-    if(nomClasse != "")
-        editeur.sauvegarder(nomClasse);
+    if(nomClasse != ""){
+        // --------------------------------- Sauvegarde ----------------------------
+        QString nomClasseMin = nomClasse.toLower(); // on prend le nom de la classe en minuscule pour le nom des fichiers
+        { // ---------------------------------- Fichier .egna -----------------------------
+            QFile fichierEGNA(nomClasseMin + ".egna");
+            if(not(fichierEGNA.open(QFile::WriteOnly | QFile::Text))){ // Si on arrive pas à ouvrir
+                qDebug() << "Erreur" << fichierEGNA.errorString();
+                return;
+            }
+            QDataStream out(&fichierEGNA); // fait une référence au fichier et permet de le manipuler comme un flux
+
+            for (Module* module : *modulesActif){
+                module->sauvegarder(out);
+            }
+
+            fichierEGNA.close();
+        }
+        { // ---------------------------------- Fichier .hpp -----------------------------
+            QFile fichierHPP(nomClasseMin + ".hpp");
+            if(not(fichierHPP.open(QFile::WriteOnly | QFile::Text))){ // Si on arrive pas à ouvrir
+                qDebug() << "Erreur" << fichierHPP.errorString();
+                return;
+            }
+            QTextStream out(&fichierHPP); // fait une référence au fichier et permet de le manipuler comme un flux
+
+            /*code ici -----------------------------------------------------------------------------------------------------------------------------------*/
+
+            fichierHPP.close();
+        }
+        { // ---------------------------------- Fichier .cpp -----------------------------
+            QFile fichierCPP(nomClasseMin + ".cpp");
+            if(not(fichierCPP.open(QFile::WriteOnly | QFile::Text))){ // Si on arrive pas à ouvrir
+                qDebug() << "Erreur" << fichierCPP.errorString();
+                return;
+            }
+            QTextStream out(&fichierCPP); // fait une référence au fichier et permet de le manipuler comme un flux
+
+            out <<  "// Cette classe à était créé grace à un éditeur disponible sur : https://github.com/erreur130/Editeur_Nombres_Aleatoire\n\n"
+                    "#include \"" << nomClasse << "\"\n"
+                    "";
+            /* suite du code ici -----------------------------------------------------------------------------------------------------------------------------------*/
+
+            fichierCPP.close();
+        }
+    }
 }
 
 void MainWindow::recevoirIdModule(int idOrigine, int idCible, bool vientDeTemplate){

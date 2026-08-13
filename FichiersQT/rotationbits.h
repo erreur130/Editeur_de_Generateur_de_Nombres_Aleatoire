@@ -8,12 +8,12 @@ class RotationBits : public Module{
     uint8_t decalage;
 public:
     RotationBits(QObject*, uint8_t = 1);
-    ~RotationBits();
+    RotationBits(QObject*, QDataStream &);
     void valeurSuivante(uint64_t (&val)[2]) const ;
     Module* copie() const;
     QWidget* creerPaneauParametres();
-    void sauvegarder(QFile &) const;
-    QString avoirNom() const;
+    void sauvegarder(QDataStream &) const;
+    void ecrireAlgo(QTextStream &) const;
 
     inline uint8_t avoirDecalage() const {return decalage;};
 
