@@ -280,7 +280,7 @@ void MainWindow::recevoirNomClasse(QString nomClasse){
                     << nomClasse << "::" << nomClasse << "(uint64_t graine_)\n" /*constructeur avec un uint64_t*/
                     ": graine(graine_), etat{uint64_t()}{}\n\n"
                     << nomClasse << "::~" << nomClasse << "(){}\n\n" /*destructeur*/
-                    "void " << nomClasse << "::renitialiserEtat(){" /*renitialiserEtat*/
+                    "void " << nomClasse << "::renitialiserEtat(){\n" /*renitialiserEtat*/
                     "   etat[0] = graine;\n"
                     "   etat[1] = -graine; // -graine est une valeur non signé, c'est juste pour faire une valeur différente\n"
                     "   etatSuivant();\n"
