@@ -256,7 +256,9 @@ void MainWindow::recevoirNomClasse(QString nomClasse){
                 return;
             }
             QTextStream out(&fichierHPP); // fait une référence au fichier et permet de le manipuler comme un flux
-
+            //#include <bit>
+            // inline changerGraine(uint64_t graine_){graine = graine_;};
+            // inline uint64_t avoirGraine(){return graine;};
             /*code ici -----------------------------------------------------------------------------------------------------------------------------------*/
 
             fichierHPP.close();
@@ -270,10 +272,35 @@ void MainWindow::recevoirNomClasse(QString nomClasse){
             QTextStream out(&fichierCPP); // fait une référence au fichier et permet de le manipuler comme un flux
 
             out <<  "// Cette classe à était créé grace à un éditeur disponible sur : https://github.com/erreur130/Editeur_Nombres_Aleatoire\n\n"
-                    "#include \"" << nomClasse << "\"\n"
-                    "";
-            /* suite du code ici -----------------------------------------------------------------------------------------------------------------------------------*/
-
+                    "#include \"" << nomClasse << ".hpp\"\n\n"
+                    << nomClasse << "::" << nomClasse << "()\n" /*constructeur par défaut*/
+                    ": graine(0), etat{uint64_t()}{\n"
+                    "   regenererGraine();\n"
+                    "}\n\n"
+                    << nomClasse << "::" << nomClasse << "(uint64_t graine_)\n" /*constructeur avec un uint64_t*/
+                    ": graine(graine_), etat{uint64_t()}{}\n\n"
+                    << nomClasse << "::~" << nomClasse << "(){}\n\n" /*destructeur*/
+                    "void " << nomClasse << "::renitialiserEtat(){" /*renitialiserEtat*/
+                    "   etat[0] = graine;\n"
+                    "   etat[1] = -graine; // -graine est une valeur non signé, c'est juste pour faire une valeur différente\n"
+                    "   etatSuivant();\n"
+                    "}\n\n"
+                    "void " << nomClasse << "::etatSuivant(){\n" /*etatSuivant()*/
+                    "   // suite de calcules qui change l'état\n\n";
+            for (Module* module: *modulesActif)
+                module->ecrireAlgo(out);
+            out <<  "}\n\n"
+                    "void " << nomClasse << "::regenererGraine(){\n" /*regenererGraine*/
+                    "   // Pour ne pas dépendre d'un autre algo d'aléatoire on initialise la graine avec le temps\n"
+                    "   using namespace std::chrono;\n"
+                    "   time_point<system_clock> now = system_clock::now();\n"
+                    "   system_clock::duration temps = now.time_since_epoch();\n"
+                    "   // Conversion duration -> nanoseconds -> uint64_t\n"
+                    "   nanoseconds tempsNano = duration_cast<nanoseconds>(temps);\n"
+                    "   graine = static_cast<uint64_t>(tempsNano.count());\n"
+                    "   // Puis on change l'état pour qui soit conforme aux changement\n"
+                    "   renitialiserEtat();\n"
+                    "}\n";
             fichierCPP.close();
         }
     }
