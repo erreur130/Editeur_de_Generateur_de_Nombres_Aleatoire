@@ -101,15 +101,15 @@ GNA
 --
 - graine : uint64_t
 - etat[2] : uint64_t
-- bloquerLEtat : bool
 --
 + GNA()
 + GNA(graine_ : uint64_t)
 + ~GNA()
+- renitialiserEtat()
 - etatSuivant()
-+ fixerGraine(graine_ : uint64_t)
++ changerGraine(graine_ : uint64_t)
 + regenererGraine()
-+ graineActuelle() : uint64_t
++ avoirGraine() : uint64_t
 
 + alea&lt;T&gt;(max : T) : T
 + alea&lt;T&gt;(min, max : T) : T
