@@ -93,7 +93,7 @@ m2=0..1</panel_attributes>
       <x>30</x>
       <y>155</y>
       <w>185</w>
-      <h>170</h>
+      <h>160</h>
     </coordinates>
     <panel_attributes>&lt;&lt;Générateur à 
 Nombres aléatoire&gt;&gt;
@@ -113,9 +113,8 @@ GNA
 
 + alea&lt;T&gt;(max : T) : T
 + alea&lt;T&gt;(min, max : T) : T
-+ aleaBool() : bool
-+ choisirDans&lt;T&gt;(conteneur : QVector&lt;T&gt;&amp;) : T
-+ melanger&lt;T&gt;(conteneur : QVector&lt;T&gt;&amp;)
++ aleaBool() : bool : T
++ melanger&lt;T&gt;(debut, fin : Iterator)
 
 </panel_attributes>
     <additional_attributes/>
