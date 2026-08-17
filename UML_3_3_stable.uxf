@@ -113,7 +113,7 @@ GNA
 
 + alea&lt;T&gt;(max : T) : T
 + alea&lt;T&gt;(min, max : T) : T
-+ aleaBool() : bool : T
++ aleaBool() : bool
 + melanger&lt;T&gt;(debut, fin : Iterator)
 
 </panel_attributes>
@@ -329,7 +329,7 @@ bg=blue</panel_attributes>
       <x>50</x>
       <y>435</y>
       <w>225</w>
-      <h>115</h>
+      <h>105</h>
     </coordinates>
     <panel_attributes>RotationBits
 --
@@ -342,7 +342,6 @@ bg=blue</panel_attributes>
 /+ creerPanneauParametres() : QWidget*/
 /+ sauvegarder(out : QDataStream)/
 /+ ecrireAlgo(out : QTextStream)/
-/+ avoirNom() : QString/
 + changerDecalage()
 + avoirDecalage() : uint8_t</panel_attributes>
     <additional_attributes/>
@@ -353,7 +352,7 @@ bg=blue</panel_attributes>
       <x>530</x>
       <y>600</y>
       <w>225</w>
-      <h>110</h>
+      <h>105</h>
     </coordinates>
     <panel_attributes>MultiplisationConstante
 --
@@ -366,7 +365,6 @@ bg=blue</panel_attributes>
 /+ creerPanneauParametres() : QWidget*/
 /+ sauvegarder(out : QDataStream)/
 /+ ecrireAlgo(out : QTextStream)/
-/+ avoirNom() : QString/
 + changerConstante()
 + avoirConstante() : uint64_t</panel_attributes>
     <additional_attributes/>
@@ -377,7 +375,7 @@ bg=blue</panel_attributes>
       <x>295</x>
       <y>435</y>
       <w>200</w>
-      <h>145</h>
+      <h>135</h>
     </coordinates>
     <panel_attributes>Xorshift
 --
@@ -390,7 +388,6 @@ bg=blue</panel_attributes>
 /+ creerPanneauParametres() : QWidget*/
 /+ sauvegarder(out : QDataStream)/
 /+ ecrireAlgo(out : QTextStream)/
-/+ avoirNom() : QString/
 + changerA()
 + changerB()
 + changerC()
@@ -405,7 +402,7 @@ bg=blue</panel_attributes>
       <x>820</x>
       <y>600</y>
       <w>255</w>
-      <h>155</h>
+      <h>145</h>
     </coordinates>
     <panel_attributes>PCG
 --
@@ -419,7 +416,6 @@ bg=blue</panel_attributes>
 /+ creerPanneauParametres() : QWidget*/
 /+ sauvegarder(out : QDataStream)/
 /+ ecrireAlgo(out : QTextStream)/
-/+ avoirNom() : QString/
 + changerMult()
 + changerIncr()
 + changerMod()
@@ -434,7 +430,7 @@ bg=blue</panel_attributes>
       <x>305</x>
       <y>595</y>
       <w>185</w>
-      <h>125</h>
+      <h>120</h>
     </coordinates>
     <panel_attributes>SplitMix64
 --
@@ -447,7 +443,6 @@ bg=blue</panel_attributes>
 /+ creerPanneauParametres() : QWidget*/
 /+ sauvegarder(out : QDataStream)/
 /+ ecrireAlgo(out : QTextStream)/
-/+ avoirNom() : QString/
 + changerA()
 + changerB()
 + avoirA() : uint64_t
@@ -460,7 +455,7 @@ bg=blue</panel_attributes>
       <x>820</x>
       <y>435</y>
       <w>200</w>
-      <h>145</h>
+      <h>135</h>
     </coordinates>
     <panel_attributes>LCG
 --
@@ -473,7 +468,6 @@ bg=blue</panel_attributes>
 /+ creerPanneauParametres() : QWidget*/
 /+ sauvegarder(out : QDataStream)/
 /+ ecrireAlgo(out : QTextStream)/
-/+ avoirNom() : QString/
 + changerMult()
 + changerIncr()
 + changerMod()
@@ -488,7 +482,7 @@ bg=blue</panel_attributes>
       <x>530</x>
       <y>440</y>
       <w>225</w>
-      <h>110</h>
+      <h>105</h>
     </coordinates>
     <panel_attributes>AdditionConstante
 --
@@ -501,7 +495,6 @@ bg=blue</panel_attributes>
 /+ creerPanneauParametres() : QWidget*/
 /+ sauvegarder(out : QDataStream)/
 /+ ecrireAlgo(out : QTextStream)/
-/+ avoirNom() : QString/
 + changerConstante()
 + avoirConstante() : uint64_t</panel_attributes>
     <additional_attributes/>
