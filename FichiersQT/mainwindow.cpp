@@ -257,14 +257,18 @@ void MainWindow::recevoirNomClasse(QString nomClasse){
             }
             QTextStream out(&fichierHPP); // fait une référence au fichier et permet de le manipuler comme un flux
 
-             out << "// Cette classe à était créé grace à un éditeur disponible sur : https://github.com/erreur130/Editeur_Nombres_Aleatoire\n\n"
+             out << "// Cette classe à était créé grace à un éditeur disponible sur : https://github.com/erreur130/Editeur_Nombres_Aleatoire\n"
+                    "// ------------------ Attention ! à compiler avec -std=c++20 ---------------------------\n\n"
                     "#include <cmath>       // std::fmod\n"
                     "#include <bit>         // std::bit_cast\n"
                     "#include <type_traits> // std::is_integral_v, std::is_arithmetic_v\n"
                     "#include <iterator>    // std::distance, std::iter_swap\n"
                     "#include <stdexcept>   // std::invalid_argument, pour le throw\n"
-                    "#include <cstdint>     // uint64_t\n\n"
+                    "#include <cstdint>     // uint64_t\n"
+                    "#include <chrono>      // namespace std::chrono dans " << nomClasse << "::regenererGraine()\n\n"
                     "class " << nomClasse << " {\n" /* ------------ fonctions privées : ----------*/
+                    "   uint64_t graine;\n"
+                    "   uint64_t etat[2];\n\n"
                     "   void renitialiserEtat();\n" /*renitialiserEtat*/
                     "   void etatSuivant();\n\n" /*etatSuivant*/
                     "public :\n"                    /* ------------ fonctions publics : ----------*/
@@ -274,39 +278,39 @@ void MainWindow::recevoirNomClasse(QString nomClasse){
                     "   inline void changerGraine(uint64_t graine_){graine = graine_;};\n" /*changerGraine*/
                     "   void regenererGraine();\n" /*regenererGraine*/
                     "   inline uint64_t avoirGraine() const{return graine;};\n\n" /*avoirGraine*/
-                    "   template <typename T> T alea(T min, T max) const {\n" /*alea(T min, T max)*/
+                    "   // La valeur de retour ce retrouve dans [min , max[\n"
+                    "   template <typename T> T alea(T min, T max){\n" /*alea(T min, T max)*/
+                    "       static_assert(std::is_integral_v<T> || std::is_floating_point_v<T>, \"alea() : Type non supporté!\"); // plante à la compilation\n"
                     "       if (min > max)\n"
-                    "           static_assert(false, \"alea() : Valeur minimale est supérieur à celle maximale!\"); // plante à la compilation\n"
-                    "       if constexpr (std::is_integral_v<T>){ // logique entière\n"
-                    "           uint64_t plage = static_cast<uint64_t>(max) - static_cast<uint64_t>(min) + 1;\n"
-                    "           return min + static_cast<T>(etat[1] % plage);\n"
-                    "       } else if constexpr (std::is_floating_point_v<T>){ // logique flottante\n"
-                    "           uint64_t bitsSecurises = etat[1] & 0x7FEFFFFFFFFFFFFFULL; // 0x7FF enlève le signe et NaN/inf\n"
-                    "           double valeurBrute = std::bit_cast<double>(bitsSecurises); // double et uint64_t on tout les deux 8 octets\n"
-                    "           T plage = max - min;\n"
-                    "           return min + std::fmod(static_cast<T>(valeurBrute), plage); // std::fmod() = % mais pour les nb à virgules flotantes\n"
-                    "       } else {\n"
-                    "            static_assert(false, \"alea() : Type non supporté!\");"
-                    "       }\n"
+                    "           throw std::invalid_argument(\"alea() : Valeur minimale supérieure à celle maximale!\");\n"
                     "       etatSuivant();\n"
+                    "       if constexpr (std::is_integral_v<T>){ // logique entière\n" // calcule entier
+                    "           uint64_t plage = static_cast<uint64_t>(max) - static_cast<uint64_t>(min);\n"
+                    "           return min + static_cast<T>(etat[1] % plage);\n"
+                    "       } else if constexpr (std::is_floating_point_v<T>){ // logique flottante\n" // calcule flottant
+                    "           etatSuivant();\n"
+                    "           // prend les 53 bits de poids fort de etat[0] et les divise par 2^53\n"
+                    "           double ratio = static_cast<double>(etat[1] >> 11) / (1ULL << 53); // est dans l'intervale [0, 1[\n"
+                    "           return static_cast<T>(min + ratio * (max - min)); // min + un bout de la plage\n"
+                    "       }\n"
                     "   }\n\n"
-                    "   template <typename T> T alea(T max) const {\n" /*alea(T max)*/
+                    "   // La valeur de retour ce retrouve dans [0 , max[\n"
+                    "   template <typename T> T alea(T max){\n" /*alea(T max)*/
                     "       return alea(static_cast<T>(0), max);\n"
                     "   }\n\n"
-                    "   bool aleaBool() const {\n" /*aleaBool*/
-                    "       return static_cast<bool>(etat[1]);"
-                    "   }\n\n"
-                    "   template <std::random_access_iterator Iterator> void melanger(Iterator debut, Iterator fin) const {\n" /*melanger*/
+                    "   bool aleaBool();\n\n" /*aleaBool*/
+                    "   template <std::random_access_iterator Iterator> void melanger(Iterator debut, Iterator fin){\n" /*melanger*/
                     "       if (fin < debut)\n"
-                    "           throw std::invalid_argument(\"melanger() : l'iterateur fin est avant debut, plage invalide!\")\n"
+                    "           throw std::invalid_argument(\"melanger() : l'iterateur fin est avant debut, plage invalide!\");\n"
                     "       else if (debut == fin)\n"
                     "           return; // rien à mélanger\n\n"
                     "       // algo de Fisher-Yates ou algorithme de Knuth\n"
                     "       for (auto it = fin - 1; it > debut; --it){\n"
-                    "           size_t distance = std::distance(debut, it);\n"
+                    "           size_t distance = std::distance(debut, it) + 1; // +1 pour include it\n"
+                    "           etatSuivant();\n"
                     "           size_t indexAleatoire = alea<size_t>(distance);\n"
                     "           std::iter_swap(it, debut + indexAleatoire);\n"
-                    "       }"
+                    "       }\n"
                     "   }\n\n"
                     "};";
             fichierHPP.close();
@@ -320,7 +324,7 @@ void MainWindow::recevoirNomClasse(QString nomClasse){
             QTextStream out(&fichierCPP); // fait une référence au fichier et permet de le manipuler comme un flux
 
             out <<  "// Cette classe à était créé grace à un éditeur disponible sur : https://github.com/erreur130/Editeur_Nombres_Aleatoire\n\n"
-                    "#include \"" << nomClasse << ".hpp\"\n\n"
+                    "#include \"" << nomClasseMin << ".hpp\"\n\n"
                     << nomClasse << "::" << nomClasse << "()\n" /*constructeur par défaut*/
                     ": graine(0), etat{uint64_t()}{\n"
                     "   regenererGraine();\n"
@@ -348,7 +352,12 @@ void MainWindow::recevoirNomClasse(QString nomClasse){
                     "   graine = static_cast<uint64_t>(tempsNano.count());\n"
                     "   // Puis on change l'état pour qui soit conforme aux changement\n"
                     "   renitialiserEtat();\n"
+                    "}\n\n"
+                    "bool " << nomClasse << "::aleaBool(){\n" /*aleaBool*/
+                    "   etatSuivant();\n"
+                    "   return etat[1] & 1; // On prend le bit le plus faible\n"
                     "}\n";
+
             fichierCPP.close();
         }
     }
