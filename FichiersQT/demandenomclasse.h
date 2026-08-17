@@ -2,6 +2,8 @@
 #define DEMANDENOMCLASSE_H
 
 #include <QDialog>
+#include <QRegularExpression>
+#include <QRegularExpressionValidator>
 
 namespace Ui {
 class DemandeNomClasse;

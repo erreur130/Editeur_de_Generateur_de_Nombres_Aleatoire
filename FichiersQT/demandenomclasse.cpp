@@ -6,6 +6,9 @@ DemandeNomClasse::DemandeNomClasse(QWidget *parent)
     , ui(new Ui::DemandeNomClasse)
 {
     ui->setupUi(this);
+
+    // On limite les valeurs possible à mettre dans le QLineEdite pour textNom avec toutes les lettre, chiffres , _ et -
+    ui->textNom->setValidator(new QRegularExpressionValidator(QRegularExpression("^[A-Za-z0-9_-]+$"), ui->textNom));
 }
 
 DemandeNomClasse::~DemandeNomClasse()
