@@ -379,9 +379,9 @@ bg=blue</panel_attributes>
     </coordinates>
     <panel_attributes>Xorshift
 --
-- a, b, c : unsigned char
+- a, b, c : uint8_t
 --
-+ Xorshift(parent : QObject*, a_, b_, c_ : unsigned char)
++ Xorshift(parent : QObject*, a_, b_, c_ : uint8_t)
 + Xorshift(parent : QObject*, in : QDataStream)
 /+ valeurSuivant(val[2] : uint64_t)/
 /+ copie() : Module*/
@@ -391,9 +391,9 @@ bg=blue</panel_attributes>
 + changerA()
 + changerB()
 + changerC()
-+ avoirA() : unsigned char
-+ avoirB() : unsigned char
-+ avoirC() : unsigned char</panel_attributes>
++ avoirA() : uint8_t
++ avoirB() : uint8_t
++ avoirC() : uint8_t</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
