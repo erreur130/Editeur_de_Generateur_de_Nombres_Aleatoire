@@ -1,14 +1,14 @@
-#ifndef ADDITIONCONSTANTE_H
-#define ADDITIONCONSTANTE_H
+#ifndef MULTIPLICATIONCONSTANTE_H
+#define MULTIPLICATIONCONSTANTE_H
 
 #include "module.h"
 
-class AdditionConstante : public Module{
+class MultiplicationConstante : public Module{
     Q_OBJECT
     uint64_t constante;
 public:
-    AdditionConstante(QObject*, uint64_t = 1);
-    AdditionConstante(QObject*, QDataStream &);
+    MultiplicationConstante(QObject*, uint64_t = 1);
+    MultiplicationConstante(QObject*, QDataStream &);
     void valeurSuivante(uint64_t (&val)[2]) const ;
     Module* copie() const;
     QWidget* creerPaneauParametres();
@@ -21,4 +21,4 @@ public slots :
     void changerConstante();
 };
 
-#endif // ADDITIONCONSTANTE_H
+#endif // MULTIPLICATIONCONSTANTE_H

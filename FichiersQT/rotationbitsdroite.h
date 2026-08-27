@@ -1,14 +1,14 @@
-#ifndef ROTATIONBITS_H
-#define ROTATIONBITS_H
+#ifndef ROTATIONBITSDROITE_H
+#define ROTATIONBITSDROITE_H
 
 #include "module.h"
 
-class RotationBits : public Module{
+class RotationBitsDroite : public Module{
     Q_OBJECT
     uint8_t decalage;
 public:
-    RotationBits(QObject*, uint8_t = 1);
-    RotationBits(QObject*, QDataStream &);
+    RotationBitsDroite(QObject*, uint8_t = 1);
+    RotationBitsDroite(QObject*, QDataStream &);
     void valeurSuivante(uint64_t (&val)[2]) const ;
     Module* copie() const;
     QWidget* creerPaneauParametres();
@@ -21,4 +21,4 @@ public slots :
     void changerDecalage();
 };
 
-#endif // ROTATIONBITS_H
+#endif // ROTATIONBITSDROITE_H

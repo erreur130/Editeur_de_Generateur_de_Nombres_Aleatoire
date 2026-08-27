@@ -1,8 +1,11 @@
 #include "module.h"
 
-#include "rotationbits.h"
-#include "xorshift.h"
+#include "rotationbitsdroite.h"
+#include "rotationbitsgauche.h"
+#include "xorshiftdroite.h"
+#include "xorshiftgauche.h"
 #include "additionconstante.h"
+#include "multiplicationconstante.h"
 // Rajouter des #include si on rajoute des Modules -------------------------------------------------------------------------
 
 Module::Module(QObject* parent)
@@ -12,15 +15,25 @@ Module* Module::charger(QDataStream & in, QObject* parent){ // rajouter des cond
     QString type;
     in >> type;
 
-    if (type == "RotationBits")
-        return new RotationBits(parent, in);
-    else if (type == "Xorshift")
-        return new Xorshift(parent, in);
+    if (type == "RotationBitsDroite")
+        return new RotationBitsDroite(parent, in);
+
+    else if (type == "RotationBitsGauche")
+        return new RotationBitsGauche(parent, in);
+
+    else if (type == "XorshiftDroite")
+        return new XorshiftDroite(parent, in);
+
+    else if (type == "XorshiftGauche")
+        return new XorshiftGauche(parent, in);
+
     else if (type == "AdditionConstante")
         return new AdditionConstante(parent, in);
+
+    else if (type == "MultiplicationConstante")
+        return new MultiplicationConstante(parent, in);
+
     /*
-    else if (type == "")
-        return new XXX(parent, in);
     else if (type == "")
         return new XXX(parent, in);
     else if (type == "")

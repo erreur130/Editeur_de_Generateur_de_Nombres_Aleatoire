@@ -7,6 +7,7 @@
 #include <QSpinBox>
 #include <QFormLayout>
 #include <QFile>
+#include <QLineEdit>
 
 
 class Module : public QObject {

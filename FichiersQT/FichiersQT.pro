@@ -15,8 +15,11 @@ SOURCES += \
     main.cpp \
     mainwindow.cpp \
     module.cpp \
-    rotationbits.cpp \
-    xorshift.cpp
+    multiplicationconstante.cpp \
+    rotationbitsdroite.cpp \
+    rotationbitsgauche.cpp \
+    xorshiftdroite.cpp \
+    xorshiftgauche.cpp
 
 HEADERS += \
     additionconstante.h \
@@ -26,8 +29,11 @@ HEADERS += \
     listemodulestemplate.h \
     mainwindow.h \
     module.h \
-    rotationbits.h \
-    xorshift.h
+    multiplicationconstante.h \
+    rotationbitsdroite.h \
+    rotationbitsgauche.h \
+    xorshiftdroite.h \
+    xorshiftgauche.h
 
 FORMS += \
     aideModules.ui \

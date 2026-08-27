@@ -4,9 +4,12 @@
 #include <QMainWindow>
 #include <QFileDialog>
 #include "egna.h"
-#include "rotationbits.h"
-#include "xorshift.h"
+#include "rotationbitsdroite.h"
+#include "rotationbitsgauche.h"
+#include "xorshiftdroite.h"
+#include "xorshiftgauche.h"
 #include "additionconstante.h"
+#include "multiplicationconstante.h"
 // Rajouter des #include si on rajoute des Modules -------------------------------------------------------------------------
 
 QT_BEGIN_NAMESPACE

@@ -36,9 +36,12 @@ MainWindow::MainWindow(QWidget *parent)
     editeur.changerNbValeursTotale(ui->spinBoxResolution->value() * ui->spinBoxResolution->value());
 
     // On remplie la liste des templates
-    modulesParDefaut.push_back(new RotationBits(this));
-    modulesParDefaut.push_back(new Xorshift(this));
+    modulesParDefaut.push_back(new RotationBitsDroite(this));
+    modulesParDefaut.push_back(new RotationBitsGauche(this));
+    modulesParDefaut.push_back(new XorshiftDroite(this));
+    modulesParDefaut.push_back(new XorshiftGauche(this));
     modulesParDefaut.push_back(new AdditionConstante(this));
+    modulesParDefaut.push_back(new MultiplicationConstante(this));
     /* ...----------------------------------------------------------------------------------------------------------------------------------------------------------*/
     afficherListeModules();
 }
