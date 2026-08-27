@@ -7,6 +7,7 @@ CONFIG += c++20
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    additionconstante.cpp \
     demandenomclasse.cpp \
     egna.cpp \
     listemodulesactifs.cpp \
@@ -14,16 +15,19 @@ SOURCES += \
     main.cpp \
     mainwindow.cpp \
     module.cpp \
-    rotationbits.cpp
+    rotationbits.cpp \
+    xorshift.cpp
 
 HEADERS += \
+    additionconstante.h \
     demandenomclasse.h \
     egna.h \
     listemodulesactifs.h \
     listemodulestemplate.h \
     mainwindow.h \
     module.h \
-    rotationbits.h
+    rotationbits.h \
+    xorshift.h
 
 FORMS += \
     aideModules.ui \

@@ -5,6 +5,9 @@
 #include <QFileDialog>
 #include "egna.h"
 #include "rotationbits.h"
+#include "xorshift.h"
+#include "additionconstante.h"
+// Rajouter des #include si on rajoute des Modules -------------------------------------------------------------------------
 
 QT_BEGIN_NAMESPACE
 namespace Ui {

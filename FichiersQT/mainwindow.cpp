@@ -36,8 +36,9 @@ MainWindow::MainWindow(QWidget *parent)
     editeur.changerNbValeursTotale(ui->spinBoxResolution->value() * ui->spinBoxResolution->value());
 
     // On remplie la liste des templates
-    modulesParDefaut.push_back(new RotationBits(this, 63));
-    modulesParDefaut.push_back(new RotationBits(this, 2)); // pour des tests
+    modulesParDefaut.push_back(new RotationBits(this));
+    modulesParDefaut.push_back(new Xorshift(this));
+    modulesParDefaut.push_back(new AdditionConstante(this));
     /* ...----------------------------------------------------------------------------------------------------------------------------------------------------------*/
     afficherListeModules();
 }
@@ -125,7 +126,12 @@ void MainWindow::afficherBruit(){
         }
 
         // Affichage de l'image dans le label
-        ui->imageBruit->setPixmap(QPixmap::fromImage(image));
+        QPixmap pixmap = QPixmap::fromImage(image);
+        QPixmap agrandie = pixmap.scaled(
+            ui->imageBruit->width(), ui->imageBruit->height(),
+            Qt::KeepAspectRatio, Qt::FastTransformation
+            );
+        ui->imageBruit->setPixmap(agrandie);
 
     } else { // Sinon on met 1px blanc
         QImage image(1, 1, QImage::Format_Indexed8);

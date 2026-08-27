@@ -47,7 +47,7 @@ uint8_t EGNA::suivantPixelBruit(){
     calculeAutocorrelation();
     calculeEquilibreBits();
 
-    return static_cast<uint8_t>(etat[0]); // le cast ne prend que les 8 derniers bits ce qui correspond à faire modulo 256
+    return static_cast<uint8_t>(etat[1]); // le cast ne prend que les 8 derniers bits ce qui correspond à faire modulo 256
 }
 
 void EGNA::calculeMoyenne(){
