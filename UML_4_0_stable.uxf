@@ -331,7 +331,7 @@ bg=blue</panel_attributes>
       <w>225</w>
       <h>105</h>
     </coordinates>
-    <panel_attributes>RotationBits
+    <panel_attributes>RotationBitsGauche
 --
 - decalage : uint8_t
 --
@@ -349,8 +349,8 @@ bg=blue</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>530</x>
-      <y>600</y>
+      <x>790</x>
+      <y>435</y>
       <w>225</w>
       <h>105</h>
     </coordinates>
@@ -375,112 +375,28 @@ bg=blue</panel_attributes>
       <x>295</x>
       <y>435</y>
       <w>200</w>
-      <h>135</h>
+      <h>105</h>
     </coordinates>
-    <panel_attributes>Xorshift
+    <panel_attributes>XorshiftGauche
 --
-- a, b, c : uint8_t
+- decalage : uint8_t
 --
-+ Xorshift(parent : QObject*, a_, b_, c_ : uint8_t)
++ Xorshift(parent : QObject*, decalage_ : uint8_t)
 + Xorshift(parent : QObject*, in : QDataStream)
 /+ valeurSuivant(val[2] : uint64_t)/
 /+ copie() : Module*/
 /+ creerPanneauParametres() : QWidget*/
 /+ sauvegarder(out : QDataStream)/
 /+ ecrireAlgo(out : QTextStream)/
-+ changerA()
-+ changerB()
-+ changerC()
-+ avoirA() : uint8_t
-+ avoirB() : uint8_t
-+ avoirC() : uint8_t</panel_attributes>
-    <additional_attributes/>
-  </element>
-  <element>
-    <id>UMLClass</id>
-    <coordinates>
-      <x>820</x>
-      <y>600</y>
-      <w>255</w>
-      <h>145</h>
-    </coordinates>
-    <panel_attributes>PCG
---
-- mult, incr, mod : uint64_t
-- permu : int
---
-+ PCG(parent : QObject*, mult_, incr_, mod_ : uint64_t, permu_ : int)
-+ PCG(parent : QObject*, in : QDataStream)
-/+ valeurSuivant(val[2] : uint64_t)/
-/+ copie() : Module*/
-/+ creerPanneauParametres() : QWidget*/
-/+ sauvegarder(out : QDataStream)/
-/+ ecrireAlgo(out : QTextStream)/
-+ changerMult()
-+ changerIncr()
-+ changerMod()
-+ avoirMult() : uint64_t
-+ avoirIncr() : uint64_t
-+ avoirMod() : uint64_t</panel_attributes>
-    <additional_attributes/>
-  </element>
-  <element>
-    <id>UMLClass</id>
-    <coordinates>
-      <x>305</x>
-      <y>595</y>
-      <w>185</w>
-      <h>120</h>
-    </coordinates>
-    <panel_attributes>SplitMix64
---
-- a, b : uint64_t
---
-+ SplitMix64(parent : QObject*, a_, b_ : uint64_t)
-+ SplitMix64(parent : QObject*, in : QDataStream)
-/+ valeurSuivant(val[2] : uint64_t)/
-/+ copie() : Module*/
-/+ creerPanneauParametres() : QWidget*/
-/+ sauvegarder(out : QDataStream)/
-/+ ecrireAlgo(out : QTextStream)/
-+ changerA()
-+ changerB()
-+ avoirA() : uint64_t
-+ avoirB() : uint64_t</panel_attributes>
-    <additional_attributes/>
-  </element>
-  <element>
-    <id>UMLClass</id>
-    <coordinates>
-      <x>820</x>
-      <y>435</y>
-      <w>200</w>
-      <h>135</h>
-    </coordinates>
-    <panel_attributes>LCG
---
-- mult, incr, mod : uint64_t
---
-+ LCG(parent : QObject*, mult_, incr_, mod_ : uint64_t)
-+ LCG(parent : QObject*, in : QDataStream)
-/+ valeurSuivant(val[2] : uint64_t)/
-/+ copie() : Module*/
-/+ creerPanneauParametres() : QWidget*/
-/+ sauvegarder(out : QDataStream)/
-/+ ecrireAlgo(out : QTextStream)/
-+ changerMult()
-+ changerIncr()
-+ changerMod()
-+ avoirMult() : uint64_t
-+ avoirIncr() : uint64_t
-+ avoirMod() : uint64_t</panel_attributes>
++ changerDecalage()
++ avoirDecalage() : uint8_t</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
       <x>530</x>
-      <y>440</y>
+      <y>435</y>
       <w>225</w>
       <h>105</h>
     </coordinates>
@@ -502,33 +418,8 @@ bg=blue</panel_attributes>
   <element>
     <id>UMLNote</id>
     <coordinates>
-      <x>1100</x>
-      <y>630</y>
-      <w>125</w>
-      <h>30</h>
-    </coordinates>
-    <panel_attributes>permu : int
-ne peut pas être définit au début,
-il est calculer
-bg=blue</panel_attributes>
-    <additional_attributes/>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>1070</x>
-      <y>635</y>
-      <w>40</w>
-      <h>15</h>
-    </coordinates>
-    <panel_attributes>lt=-</panel_attributes>
-    <additional_attributes>60.0;10.0;10.0;10.0</additional_attributes>
-  </element>
-  <element>
-    <id>UMLNote</id>
-    <coordinates>
-      <x>100</x>
-      <y>625</y>
+      <x>830</x>
+      <y>600</y>
       <w>115</w>
       <h>30</h>
     </coordinates>
@@ -541,57 +432,13 @@ bg=red</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>875</x>
+      <x>745</x>
       <y>380</y>
       <w>15</w>
       <h>65</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;-</panel_attributes>
     <additional_attributes>10.0;10.0;10.0;110.0</additional_attributes>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>805</x>
-      <y>380</y>
-      <w>25</w>
-      <h>240</h>
-    </coordinates>
-    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
-    <additional_attributes>10.0;10.0;10.0;460.0;30.0;460.0</additional_attributes>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>750</x>
-      <y>380</y>
-      <w>40</w>
-      <h>240</h>
-    </coordinates>
-    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
-    <additional_attributes>60.0;10.0;60.0;460.0;10.0;460.0</additional_attributes>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>485</x>
-      <y>380</y>
-      <w>230</w>
-      <h>270</h>
-    </coordinates>
-    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
-    <additional_attributes>440.0;10.0;440.0;80.0;70.0;80.0;70.0;520.0;10.0;520.0</additional_attributes>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>745</x>
-      <y>380</y>
-      <w>15</w>
-      <h>70</h>
-    </coordinates>
-    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
-    <additional_attributes>10.0;10.0;10.0;120.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
@@ -608,12 +455,12 @@ bg=red</panel_attributes>
     <id>Relation</id>
     <coordinates>
       <x>245</x>
-      <y>365</y>
+      <y>360</y>
       <w>460</w>
-      <h>80</h>
+      <h>85</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;-</panel_attributes>
-    <additional_attributes>900.0;10.0;10.0;10.0;10.0;140.0</additional_attributes>
+    <additional_attributes>900.0;10.0;10.0;10.0;10.0;150.0</additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>
@@ -859,5 +706,84 @@ actif d'un projet
 bg=gray
 fg=blue</panel_attributes>
     <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>835</x>
+      <y>380</y>
+      <w>15</w>
+      <h>65</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;110.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>295</x>
+      <y>575</y>
+      <w>200</w>
+      <h>105</h>
+    </coordinates>
+    <panel_attributes>XorshiftDroite
+--
+- decalage : uint8_t
+--
++ Xorshift(parent : QObject*, decalage_ : uint8_t)
++ Xorshift(parent : QObject*, in : QDataStream)
+/+ valeurSuivant(val[2] : uint64_t)/
+/+ copie() : Module*/
+/+ creerPanneauParametres() : QWidget*/
+/+ sauvegarder(out : QDataStream)/
+/+ ecrireAlgo(out : QTextStream)/
++ changerDecalage()
++ avoirDecalage() : uint8_t</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>490</x>
+      <y>380</y>
+      <w>230</w>
+      <h>265</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>440.0;10.0;440.0;40.0;30.0;40.0;30.0;510.0;10.0;510.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>50</x>
+      <y>570</y>
+      <w>225</w>
+      <h>105</h>
+    </coordinates>
+    <panel_attributes>RotationBitsDroite
+--
+- decalage : uint8_t
+--
++ RotationBits(parent : QObject*, decalage_ : uint8_t)
++ RotationBits(parent : QObject*, in : QDataStream)
+/+ valeurSuivant(val[2] : uint64_t)/
+/+ copie() : Module*/
+/+ creerPanneauParametres() : QWidget*/
+/+ sauvegarder(out : QDataStream)/
+/+ ecrireAlgo(out : QTextStream)/
++ changerDecalage()
++ avoirDecalage() : uint8_t</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>270</x>
+      <y>370</y>
+      <w>435</w>
+      <h>265</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>850.0;10.0;20.0;10.0;20.0;510.0;10.0;510.0</additional_attributes>
   </element>
 </diagram>
