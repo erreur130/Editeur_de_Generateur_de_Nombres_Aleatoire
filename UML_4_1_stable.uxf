@@ -418,8 +418,8 @@ bg=blue</panel_attributes>
   <element>
     <id>UMLNote</id>
     <coordinates>
-      <x>830</x>
-      <y>600</y>
+      <x>1055</x>
+      <y>500</y>
       <w>115</w>
       <h>30</h>
     </coordinates>
@@ -785,5 +785,67 @@ fg=blue</panel_attributes>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;-</panel_attributes>
     <additional_attributes>850.0;10.0;20.0;10.0;20.0;510.0;10.0;510.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>535</x>
+      <y>580</y>
+      <w>225</w>
+      <h>75</h>
+    </coordinates>
+    <panel_attributes>NonLogique
+--
+--
++ NonLogique(parent : QObject*, constante_ : uint64_t)
++ NonLogique(parent : QObject*, in : QDataStream)
+/+ valeurSuivant(val[2] : uint64_t)/
+/+ copie() : Module*/
+/+ creerPanneauParametres() : QWidget*/
+/+ sauvegarder(out : QDataStream)/
+/+ ecrireAlgo(out : QTextStream)/</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>755</x>
+      <y>380</y>
+      <w>25</w>
+      <h>255</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>30.0;10.0;30.0;490.0;10.0;490.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>790</x>
+      <y>580</y>
+      <w>225</w>
+      <h>75</h>
+    </coordinates>
+    <panel_attributes>InversementBits
+--
+--
++ InversementBits(parent : QObject*, constante_ : uint64_t)
++ InversementBits(parent : QObject*, in : QDataStream)
+/+ valeurSuivant(val[2] : uint64_t)/
+/+ copie() : Module*/
+/+ creerPanneauParametres() : QWidget*/
+/+ sauvegarder(out : QDataStream)/
+/+ ecrireAlgo(out : QTextStream)/</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>775</x>
+      <y>380</y>
+      <w>25</w>
+      <h>255</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;490.0;30.0;490.0</additional_attributes>
   </element>
 </diagram>
