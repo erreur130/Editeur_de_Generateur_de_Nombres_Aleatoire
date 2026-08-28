@@ -14,6 +14,7 @@ AdditionConstante::AdditionConstante(QObject* parent, QDataStream & in)
 }
 
 void AdditionConstante::valeurSuivante(uint64_t (&val)[2]) const {
+    // addition d'une constante
     uint64_t tmp = val[1];
     val[1] += constante; // on fait l'addition
     if (tmp > val[1]){ // alors overflow
@@ -21,7 +22,7 @@ void AdditionConstante::valeurSuivante(uint64_t (&val)[2]) const {
     }
 }
 
-Module* AdditionConstante::copie() const{
+Module* AdditionConstante::copie() const {
     return new AdditionConstante(parent(),constante);
 }
 
@@ -62,6 +63,7 @@ void AdditionConstante::sauvegarder(QDataStream & out) const{
 
 void AdditionConstante::ecrireAlgo(QTextStream & out) const{
     out <<  "   {\n"
+            "       // addition d'une constante"
             "       uint64_t constante = " << constante << ";\n"
             "       uint64_t tmp = etat[1];\n"
             "       etat[1] += constante; // on fait l'addition\n"

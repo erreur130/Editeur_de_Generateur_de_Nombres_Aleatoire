@@ -12,6 +12,7 @@ RotationBitsDroite::RotationBitsDroite(QObject* parent, QDataStream & in)
 }
 
 void RotationBitsDroite::valeurSuivante(uint64_t (&val)[2]) const {
+    // rotation bits à droite
     uint64_t retenue0 = 0xFFFFFFFFFFFFFFFFULL >> (64-decalage);  // des 1 sur les bits qui seraient remplacé
     uint64_t retenue1 = 0xFFFFFFFFFFFFFFFFULL >> (64-decalage);  // des 1 sur les bits qui seraient remplacé
     retenue0 &= val[0]; // la retenue0 devient les bits qui vont disparaitre dans la partie [0]
@@ -66,6 +67,7 @@ void RotationBitsDroite::sauvegarder(QDataStream & out) const{
 
 void RotationBitsDroite::ecrireAlgo(QTextStream & out) const{
     out <<  "   {\n"
+            "       // rotation bits à droite\n"
             "       uint8_t decalage = " << decalage << ";\n"
             "       uint64_t retenue0 = 0xFFFFFFFFFFFFFFFFULL >> (64-decalage);  // des 1 sur les bits qui seraient remplacé\n"
             "       uint64_t retenue1 = 0xFFFFFFFFFFFFFFFFULL >> (64-decalage);  // des 1 sur les bits qui seraient remplacé\n"

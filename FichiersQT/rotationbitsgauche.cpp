@@ -12,6 +12,7 @@ RotationBitsGauche::RotationBitsGauche(QObject* parent, QDataStream & in)
 }
 
 void RotationBitsGauche::valeurSuivante(uint64_t (&val)[2]) const {
+    // rotation bits à gauche
     uint64_t retenue0 = 0xFFFFFFFFFFFFFFFFULL << (64-decalage);  // des 1 sur les bits qui seraient remplacé
     uint64_t retenue1 = 0xFFFFFFFFFFFFFFFFULL << (64-decalage);  // des 1 sur les bits qui seraient remplacé
     retenue0 &= val[0]; // la retenue0 devient les bits qui vont disparaitre dans la partie [0]
@@ -66,15 +67,16 @@ void RotationBitsGauche::sauvegarder(QDataStream & out) const{
 
 void RotationBitsGauche::ecrireAlgo(QTextStream & out) const{
     out <<  "   {\n"
+            "       // rotation bits à gauche\n"
             "       uint8_t decalage = " << decalage << ";\n"
             "       uint64_t retenue0 = 0xFFFFFFFFFFFFFFFFULL << (64-decalage);  // des 1 sur les bits qui seraient remplacé\n"
             "       uint64_t retenue1 = 0xFFFFFFFFFFFFFFFFULL << (64-decalage);  // des 1 sur les bits qui seraient remplacé\n"
-            "       retenue0 &= val[0]; // la retenue0 devient les bits qui vont disparaitre dans la partie [0]\n"
-            "       retenue1 &= val[1]; // la retenue1 devient les bits qui vont disparaitre dans la partie [1]\n\n"
-            "       val[0] <<= decalage; // on décale la partie haute (trou à gauche dans la partie [0])\n"
-            "       val[1] <<= decalage; // on décale la partie basse (trou à gauche dans la partie [1])\n\n"
-            "       val[1] |= retenue0 >> (64 - decalage); // on remplis le trou à droite (car la retenue est sauvegardé à gauche) par ce qui est sortit de l'autre partie de val\n"
-            "       val[0] |= retenue1 >> (64 - decalage); // on remplis le trou à droite (car la retenue est sauvegardé à gauche) par ce qui est sortit de l'autre partie de val\n"
+            "       retenue0 &= etat[0]; // la retenue0 devient les bits qui vont disparaitre dans la partie [0]\n"
+            "       retenue1 &= etat[1]; // la retenue1 devient les bits qui vont disparaitre dans la partie [1]\n\n"
+            "       etat[0] <<= decalage; // on décale la partie haute (trou à gauche dans la partie [0])\n"
+            "       etat[1] <<= decalage; // on décale la partie basse (trou à gauche dans la partie [1])\n\n"
+            "       etat[1] |= retenue0 >> (64 - decalage); // on remplis le trou à droite (car la retenue est sauvegardé à gauche) par ce qui est sortit de l'autre partie de val\n"
+            "       etat[0] |= retenue1 >> (64 - decalage); // on remplis le trou à droite (car la retenue est sauvegardé à gauche) par ce qui est sortit de l'autre partie de val\n"
             "   }\n";
 }
 
