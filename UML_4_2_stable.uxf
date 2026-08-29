@@ -5,12 +5,13 @@
     <id>UMLClass</id>
     <coordinates>
       <x>595</x>
-      <y>70</y>
+      <y>45</y>
       <w>285</w>
-      <h>190</h>
+      <h>215</h>
     </coordinates>
     <panel_attributes>MainWindow
 --
+- nomClasse, cheminFichier : QString
 --
 + MainWindow(parent : QWidget*)
 + ~MainWindow()
@@ -19,11 +20,13 @@
 - miseAJourMethodesActives()
 + miseAJourTout()
 - afficherBruit()
+- sauvegarderFichiers()
 # resizeEvent(event : QResizeEvent*)
 
 - on_actionModules_triggered()
 - on_actionTests_triggered()
 - on_actionInfo_Projet_triggered()
+- on_actionSauvegarder_triggered()
 - on_actionSauvegarder_sous_triggered()
 - on_actionCharger_triggered()
 - on_spinBoxResolution_editingFinished()
@@ -792,13 +795,12 @@ fg=blue</panel_attributes>
       <x>535</x>
       <y>580</y>
       <w>225</w>
-      <h>75</h>
+      <h>70</h>
     </coordinates>
     <panel_attributes>NonLogique
 --
 --
 + NonLogique(parent : QObject*, constante_ : uint64_t)
-+ NonLogique(parent : QObject*, in : QDataStream)
 /+ valeurSuivant(val[2] : uint64_t)/
 /+ copie() : Module*/
 /+ creerPanneauParametres() : QWidget*/
@@ -823,13 +825,12 @@ fg=blue</panel_attributes>
       <x>790</x>
       <y>580</y>
       <w>225</w>
-      <h>75</h>
+      <h>70</h>
     </coordinates>
     <panel_attributes>InversementBits
 --
 --
 + InversementBits(parent : QObject*, constante_ : uint64_t)
-+ InversementBits(parent : QObject*, in : QDataStream)
 /+ valeurSuivant(val[2] : uint64_t)/
 /+ copie() : Module*/
 /+ creerPanneauParametres() : QWidget*/
