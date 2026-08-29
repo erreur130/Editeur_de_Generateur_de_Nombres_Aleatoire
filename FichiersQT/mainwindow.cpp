@@ -12,6 +12,8 @@ MainWindow::MainWindow(QWidget *parent)
     , modulesActif(new QVector<Module*>), modulesParDefaut(QVector<Module*>()), editeur(EGNA(modulesActif)), nomClasse(""), cheminFichier(""), ui(new Ui::MainWindow){
     ui->setupUi(this);
 
+    setWindowTitle("Editeur de Générateur de Nombres Aléatoires");
+
     //connect ListeModulesActifs -> MainWindow
     connect(ui->listeModulesActifs, &ListeModulesActifs::envoyerIdModule, this, &MainWindow::recevoirIdModule);
     //connect ListeModulesTemplate -> MainWindow
