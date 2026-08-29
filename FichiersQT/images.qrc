@@ -1,0 +1,7 @@
+<RCC>
+    <qresource prefix="/">
+        <file>images/EGNA_icon.icns</file>
+        <file>images/EGNA_icon.ico</file>
+        <file>images/EGNA_icon.png</file>
+    </qresource>
+</RCC>

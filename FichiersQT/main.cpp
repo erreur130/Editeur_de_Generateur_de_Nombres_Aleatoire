@@ -8,7 +8,7 @@ int main(int argc, char *argv[])
     QApplication a(argc, argv);
     MainWindow w;
 
-    //w.setWindowIcon(QIcon(":/images/---.png")); // pour plus tard
+    w.setWindowIcon(QIcon(":/images/EGNA_icon.png"));
 
     w.show();
     return QApplication::exec();
