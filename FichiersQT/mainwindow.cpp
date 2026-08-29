@@ -9,7 +9,7 @@
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
-    , modulesActif(new QVector<Module*>), modulesParDefaut(QVector<Module*>()), editeur(EGNA(modulesActif)), ui(new Ui::MainWindow){
+    , modulesActif(new QVector<Module*>), modulesParDefaut(QVector<Module*>()), editeur(EGNA(modulesActif)), nomClasse(""), cheminFichier(""), ui(new Ui::MainWindow){
     ui->setupUi(this);
 
     //connect ListeModulesActifs -> MainWindow
@@ -42,6 +42,8 @@ MainWindow::MainWindow(QWidget *parent)
     modulesParDefaut.push_back(new XorshiftGauche(this));
     modulesParDefaut.push_back(new AdditionConstante(this));
     modulesParDefaut.push_back(new MultiplicationConstante(this));
+    modulesParDefaut.push_back(new NonLogique(this));
+    modulesParDefaut.push_back(new InversementBits(this));
     /* ...----------------------------------------------------------------------------------------------------------------------------------------------------------*/
     afficherListeModules();
 }
@@ -203,6 +205,11 @@ void MainWindow::on_actionCharger_triggered(){
         modulesActif->clear();
         QDataStream in(&fichier); // fait une référence au fichier et permet de le manipuler comme un flux
 
+        // On récupère le chemin et le nom de la classe
+        cheminFichier = QFileInfo(fichier).path();
+        in >> nomClasse;
+
+        // On récupère les modules
         while (not(in.atEnd())){
             Module* module = Module::charger(in, this); // charger() fait le new
             if (module != nullptr)
@@ -238,20 +245,37 @@ void MainWindow::on_textGraine_editingFinished(){
         qDebug() << "Graine non changer";
 }
 
-//------------------------------------- public slots -------------------------------------------------
+void MainWindow::on_boutonChangerGraine_clicked(){
+    editeur.changerGraine();
+    // On met la nouvelle graine en visuel et le reste
+    ui->textGraine->setText("0x" + QString::number(editeur.avoirGraine(), 16)); // hexadécimale
+    miseAJourTout();
+}
 
-void MainWindow::recevoirNomClasse(QString nomClasse){
+void MainWindow::on_actionSauvegarder_triggered(){
+    if (nomClasse == QString("")){ // Si aucun projet alors on doit en définir un
+        on_actionSauvegarder_sous_triggered();
+    } else {
+        sauvegarderFichiers(); // si pas de changement de path ni de nom de classe
+    }
+}
+
+void MainWindow::sauvegarderFichiers() const{
     if(nomClasse != ""){
         // --------------------------------- Sauvegarde ----------------------------
         QString nomClasseMin = nomClasse.toLower(); // on prend le nom de la classe en minuscule pour le nom des fichiers
+
         { // ---------------------------------- Fichier .egna -----------------------------
-            QFile fichierEGNA(nomClasseMin + ".egna");
+            QFile fichierEGNA(cheminFichier + "/" + nomClasseMin + ".egna");
             if(not(fichierEGNA.open(QFile::WriteOnly | QFile::Text))){ // Si on arrive pas à ouvrir
                 qDebug() << "Erreur" << fichierEGNA.errorString();
                 return;
             }
             QDataStream out(&fichierEGNA); // fait une référence au fichier et permet de le manipuler comme un flux
 
+            // écrit le nom de la classe
+            out << nomClasse;
+            // écrit les info des modules
             for (Module* module : *modulesActif){
                 module->sauvegarder(out);
             }
@@ -259,73 +283,73 @@ void MainWindow::recevoirNomClasse(QString nomClasse){
             fichierEGNA.close();
         }
         { // ---------------------------------- Fichier .hpp -----------------------------
-            QFile fichierHPP(nomClasseMin + ".hpp");
+            QFile fichierHPP(cheminFichier + "/" + nomClasseMin + ".hpp");
             if(not(fichierHPP.open(QFile::WriteOnly | QFile::Text))){ // Si on arrive pas à ouvrir
                 qDebug() << "Erreur" << fichierHPP.errorString();
                 return;
             }
             QTextStream out(&fichierHPP); // fait une référence au fichier et permet de le manipuler comme un flux
 
-             out << "// Cette classe à était créé grace à un éditeur disponible sur : https://github.com/erreur130/Editeur_Nombres_Aleatoire\n"
-                    "// ------------------ Attention ! à compiler avec -std=c++20 ---------------------------\n\n"
-                    "#include <cmath>       // std::fmod\n"
-                    "#include <bit>         // std::bit_cast\n"
-                    "#include <type_traits> // std::is_integral_v, std::is_arithmetic_v\n"
-                    "#include <iterator>    // std::distance, std::iter_swap\n"
-                    "#include <stdexcept>   // std::invalid_argument, pour le throw\n"
-                    "#include <cstdint>     // uint64_t\n"
-                    "#include <chrono>      // namespace std::chrono dans " << nomClasse << "::regenererGraine()\n\n"
-                    "class " << nomClasse << " {\n" /* ------------ fonctions privées : ----------*/
-                    "   uint64_t graine;\n"
-                    "   uint64_t etat[2];\n\n"
-                    "   void renitialiserEtat();\n" /*renitialiserEtat*/
-                    "   void etatSuivant();\n\n" /*etatSuivant*/
-                    "public :\n"                    /* ------------ fonctions publics : ----------*/
-                    "   " << nomClasse << "();\n" /*constructeur par défaut*/
-                    "   " << nomClasse << "(uint64_t graine);\n" /*constructeur avec uint64_t*/
-                    "   ~" << nomClasse << "();\n" /*destructeur*/
-                    "   inline void changerGraine(uint64_t graine_){graine = graine_;};\n" /*changerGraine*/
-                    "   void regenererGraine();\n" /*regenererGraine*/
-                    "   inline uint64_t avoirGraine() const{return graine;};\n\n" /*avoirGraine*/
-                    "   // La valeur de retour ce retrouve dans [min , max[\n"
-                    "   template <typename T> T alea(T min, T max){\n" /*alea(T min, T max)*/
-                    "       static_assert(std::is_integral_v<T> || std::is_floating_point_v<T>, \"alea() : Type non supporté!\"); // plante à la compilation\n"
-                    "       if (min > max)\n"
-                    "           throw std::invalid_argument(\"alea() : Valeur minimale supérieure à celle maximale!\");\n"
-                    "       etatSuivant();\n"
-                    "       if constexpr (std::is_integral_v<T>){ // logique entière\n" // calcule entier
-                    "           uint64_t plage = static_cast<uint64_t>(max) - static_cast<uint64_t>(min);\n"
-                    "           return min + static_cast<T>(etat[1] % plage);\n"
-                    "       } else if constexpr (std::is_floating_point_v<T>){ // logique flottante\n" // calcule flottant
-                    "           etatSuivant();\n"
-                    "           // prend les 53 bits de poids fort de etat[0] et les divise par 2^53\n"
-                    "           double ratio = static_cast<double>(etat[1] >> 11) / (1ULL << 53); // est dans l'intervale [0, 1[\n"
-                    "           return static_cast<T>(min + ratio * (max - min)); // min + un bout de la plage\n"
-                    "       }\n"
-                    "   }\n\n"
-                    "   // La valeur de retour ce retrouve dans [0 , max[\n"
-                    "   template <typename T> T alea(T max){\n" /*alea(T max)*/
-                    "       return alea(static_cast<T>(0), max);\n"
-                    "   }\n\n"
-                    "   bool aleaBool();\n\n" /*aleaBool*/
-                    "   template <std::random_access_iterator Iterator> void melanger(Iterator debut, Iterator fin){\n" /*melanger*/
-                    "       if (fin < debut)\n"
-                    "           throw std::invalid_argument(\"melanger() : l'iterateur fin est avant debut, plage invalide!\");\n"
-                    "       else if (debut == fin)\n"
-                    "           return; // rien à mélanger\n\n"
-                    "       // algo de Fisher-Yates ou algorithme de Knuth\n"
-                    "       for (auto it = fin - 1; it > debut; --it){\n"
-                    "           size_t distance = std::distance(debut, it) + 1; // +1 pour include it\n"
-                    "           etatSuivant();\n"
-                    "           size_t indexAleatoire = alea<size_t>(distance);\n"
-                    "           std::iter_swap(it, debut + indexAleatoire);\n"
-                    "       }\n"
-                    "   }\n\n"
-                    "};";
+            out << "// Cette classe à était créé grace à un éditeur disponible sur : https://github.com/erreur130/Editeur_Nombres_Aleatoire\n"
+                   "// ------------------ Attention ! à compiler avec -std=c++20 ---------------------------\n\n"
+                   "#include <cmath>       // std::fmod\n"
+                   "#include <bit>         // std::bit_cast\n"
+                   "#include <type_traits> // std::is_integral_v, std::is_arithmetic_v\n"
+                   "#include <iterator>    // std::distance, std::iter_swap\n"
+                   "#include <stdexcept>   // std::invalid_argument, pour le throw\n"
+                   "#include <cstdint>     // uint64_t\n"
+                   "#include <chrono>      // namespace std::chrono dans " << nomClasse << "::regenererGraine()\n\n"
+                                "class " << nomClasse << " {\n" /* ------------ fonctions privées : ----------*/
+                                "   uint64_t graine;\n"
+                                "   uint64_t etat[2];\n\n"
+                                "   void renitialiserEtat();\n" /*renitialiserEtat*/
+                                "   void etatSuivant();\n\n" /*etatSuivant*/
+                                "public :\n"                    /* ------------ fonctions publics : ----------*/
+                                "   " << nomClasse << "();\n" /*constructeur par défaut*/
+                                "   " << nomClasse << "(uint64_t graine);\n" /*constructeur avec uint64_t*/
+                                "   ~" << nomClasse << "();\n" /*destructeur*/
+                                "   inline void changerGraine(uint64_t graine_){graine = graine_;};\n" /*changerGraine*/
+                                "   void regenererGraine();\n" /*regenererGraine*/
+                                "   inline uint64_t avoirGraine() const{return graine;};\n\n" /*avoirGraine*/
+                                "   // La valeur de retour ce retrouve dans [min , max[\n"
+                                "   template <typename T> T alea(T min, T max){\n" /*alea(T min, T max)*/
+                                "       static_assert(std::is_integral_v<T> || std::is_floating_point_v<T>, \"alea() : Type non supporté!\"); // plante à la compilation\n"
+                                "       if (min > max)\n"
+                                "           throw std::invalid_argument(\"alea() : Valeur minimale supérieure à celle maximale!\");\n"
+                                "       etatSuivant();\n"
+                                "       if constexpr (std::is_integral_v<T>){ // logique entière\n" // calcule entier
+                                "           uint64_t plage = static_cast<uint64_t>(max) - static_cast<uint64_t>(min);\n"
+                                "           return min + static_cast<T>(etat[1] % plage);\n"
+                                "       } else if constexpr (std::is_floating_point_v<T>){ // logique flottante\n" // calcule flottant
+                                "           etatSuivant();\n"
+                                "           // prend les 53 bits de poids fort de etat[0] et les divise par 2^53\n"
+                                "           double ratio = static_cast<double>(etat[1] >> 11) / (1ULL << 53); // est dans l'intervale [0, 1[\n"
+                                "           return static_cast<T>(min + ratio * (max - min)); // min + un bout de la plage\n"
+                                "       }\n"
+                                "   }\n\n"
+                                "   // La valeur de retour ce retrouve dans [0 , max[\n"
+                                "   template <typename T> T alea(T max){\n" /*alea(T max)*/
+                                "       return alea(static_cast<T>(0), max);\n"
+                                "   }\n\n"
+                                "   bool aleaBool();\n\n" /*aleaBool*/
+                                "   template <std::random_access_iterator Iterator> void melanger(Iterator debut, Iterator fin){\n" /*melanger*/
+                                "       if (fin < debut)\n"
+                                "           throw std::invalid_argument(\"melanger() : l'iterateur fin est avant debut, plage invalide!\");\n"
+                                "       else if (debut == fin)\n"
+                                "           return; // rien à mélanger\n\n"
+                                "       // algo de Fisher-Yates ou algorithme de Knuth\n"
+                                "       for (auto it = fin - 1; it > debut; --it){\n"
+                                "           size_t distance = std::distance(debut, it) + 1; // +1 pour include it\n"
+                                "           etatSuivant();\n"
+                                "           size_t indexAleatoire = alea<size_t>(distance);\n"
+                                "           std::iter_swap(it, debut + indexAleatoire);\n"
+                                "       }\n"
+                                "   }\n\n"
+                                "};";
             fichierHPP.close();
         }
         { // ---------------------------------- Fichier .cpp -----------------------------
-            QFile fichierCPP(nomClasseMin + ".cpp");
+            QFile fichierCPP(cheminFichier + "/" + nomClasseMin + ".cpp");
             if(not(fichierCPP.open(QFile::WriteOnly | QFile::Text))){ // Si on arrive pas à ouvrir
                 qDebug() << "Erreur" << fichierCPP.errorString();
                 return;
@@ -333,43 +357,63 @@ void MainWindow::recevoirNomClasse(QString nomClasse){
             QTextStream out(&fichierCPP); // fait une référence au fichier et permet de le manipuler comme un flux
 
             out <<  "// Cette classe à était créé grace à un éditeur disponible sur : https://github.com/erreur130/Editeur_Nombres_Aleatoire\n\n"
-                    "#include \"" << nomClasseMin << ".hpp\"\n\n"
-                    << nomClasse << "::" << nomClasse << "()\n" /*constructeur par défaut*/
-                    ": graine(0), etat{uint64_t()}{\n"
-                    "   regenererGraine();\n"
-                    "}\n\n"
-                    << nomClasse << "::" << nomClasse << "(uint64_t graine_)\n" /*constructeur avec un uint64_t*/
-                    ": graine(graine_), etat{uint64_t()}{}\n\n"
-                    << nomClasse << "::~" << nomClasse << "(){}\n\n" /*destructeur*/
-                    "void " << nomClasse << "::renitialiserEtat(){\n" /*renitialiserEtat*/
-                    "   etat[0] = graine;\n"
-                    "   etat[1] = -graine; // -graine est une valeur non signé, c'est juste pour faire une valeur différente\n"
-                    "   etatSuivant();\n"
-                    "}\n\n"
-                    "void " << nomClasse << "::etatSuivant(){\n" /*etatSuivant()*/
-                    "   // suite de calcules qui change l'état\n\n";
+                   "#include \"" << nomClasseMin << ".hpp\"\n\n"
+                << nomClasse << "::" << nomClasse << "()\n" /*constructeur par défaut*/
+                                                     ": graine(0), etat{uint64_t()}{\n"
+                                                     "   regenererGraine();\n"
+                                                     "}\n\n"
+                << nomClasse << "::" << nomClasse << "(uint64_t graine_)\n" /*constructeur avec un uint64_t*/
+                                                     ": graine(graine_), etat{uint64_t()}{}\n\n"
+                << nomClasse << "::~" << nomClasse << "(){}\n\n" /*destructeur*/
+                                                      "void " << nomClasse << "::renitialiserEtat(){\n" /*renitialiserEtat*/
+                                "   etat[0] = graine;\n"
+                                "   etat[1] = -graine; // -graine est une valeur non signé, c'est juste pour faire une valeur différente\n"
+                                "   etatSuivant();\n"
+                                "}\n\n"
+                                "void " << nomClasse << "::etatSuivant(){\n" /*etatSuivant()*/
+                                "   // suite de calcules qui change l'état\n\n";
             for (Module* module: *modulesActif)
                 module->ecrireAlgo(out);
             out <<  "}\n\n"
-                    "void " << nomClasse << "::regenererGraine(){\n" /*regenererGraine*/
-                    "   // Pour ne pas dépendre d'un autre algo d'aléatoire on initialise la graine avec le temps\n"
-                    "   using namespace std::chrono;\n"
-                    "   time_point<system_clock> now = system_clock::now();\n"
-                    "   system_clock::duration temps = now.time_since_epoch();\n"
-                    "   // Conversion duration -> nanoseconds -> uint64_t\n"
-                    "   nanoseconds tempsNano = duration_cast<nanoseconds>(temps);\n"
-                    "   graine = static_cast<uint64_t>(tempsNano.count());\n"
-                    "   // Puis on change l'état pour qui soit conforme aux changement\n"
-                    "   renitialiserEtat();\n"
-                    "}\n\n"
-                    "bool " << nomClasse << "::aleaBool(){\n" /*aleaBool*/
-                    "   etatSuivant();\n"
-                    "   return etat[1] & 1; // On prend le bit le plus faible\n"
-                    "}\n";
+                   "void " << nomClasse << "::regenererGraine(){\n" /*regenererGraine*/
+                                "   // Pour ne pas dépendre d'un autre algo d'aléatoire on initialise la graine avec le temps\n"
+                                "   using namespace std::chrono;\n"
+                                "   time_point<system_clock> now = system_clock::now();\n"
+                                "   system_clock::duration temps = now.time_since_epoch();\n"
+                                "   // Conversion duration -> nanoseconds -> uint64_t\n"
+                                "   nanoseconds tempsNano = duration_cast<nanoseconds>(temps);\n"
+                                "   graine = static_cast<uint64_t>(tempsNano.count());\n"
+                                "   // Puis on change l'état pour qui soit conforme aux changement\n"
+                                "   renitialiserEtat();\n"
+                                "}\n\n"
+                                "bool " << nomClasse << "::aleaBool(){\n" /*aleaBool*/
+                                "   etatSuivant();\n"
+                                "   return etat[1] & 1; // On prend le bit le plus faible\n"
+                                "}\n";
 
             fichierCPP.close();
         }
     }
+}
+
+//------------------------------------- public slots -------------------------------------------------
+
+void MainWindow::recevoirNomClasse(QString nomClasse_){
+    nomClasse = nomClasse_;
+
+    QString chemin = QFileDialog::getExistingDirectory( // On fait chercher un dossier pour sauvegrader
+        this,
+        "Choisir un dossier de destination",
+        QDir::homePath()
+        );
+
+    if (chemin.isEmpty()) {
+        return;
+    }
+
+    cheminFichier = chemin;
+
+    sauvegarderFichiers();
 }
 
 void MainWindow::recevoirIdModule(int idOrigine, int idCible, bool vientDeTemplate){
@@ -393,10 +437,3 @@ void MainWindow::recevoirSuprimerModule(int idOrigine, bool vientDeTemplate){
         miseAJourTout();
     }
 }
-void MainWindow::on_boutonChangerGraine_clicked(){
-    editeur.changerGraine();
-    // On met la nouvelle graine en visuel et le reste
-    ui->textGraine->setText("0x" + QString::number(editeur.avoirGraine(), 16)); // hexadécimale
-    miseAJourTout();
-}
-

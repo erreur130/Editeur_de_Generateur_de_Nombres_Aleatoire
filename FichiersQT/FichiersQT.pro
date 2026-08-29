@@ -10,12 +10,14 @@ SOURCES += \
     additionconstante.cpp \
     demandenomclasse.cpp \
     egna.cpp \
+    inversementbits.cpp \
     listemodulesactifs.cpp \
     listemodulestemplate.cpp \
     main.cpp \
     mainwindow.cpp \
     module.cpp \
     multiplicationconstante.cpp \
+    nonlogique.cpp \
     rotationbitsdroite.cpp \
     rotationbitsgauche.cpp \
     xorshiftdroite.cpp \
@@ -25,11 +27,13 @@ HEADERS += \
     additionconstante.h \
     demandenomclasse.h \
     egna.h \
+    inversementbits.h \
     listemodulesactifs.h \
     listemodulestemplate.h \
     mainwindow.h \
     module.h \
     multiplicationconstante.h \
+    nonlogique.h \
     rotationbitsdroite.h \
     rotationbitsgauche.h \
     xorshiftdroite.h \

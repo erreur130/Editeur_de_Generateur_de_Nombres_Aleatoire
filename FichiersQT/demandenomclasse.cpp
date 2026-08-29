@@ -17,7 +17,9 @@ DemandeNomClasse::~DemandeNomClasse()
 }
 
 void DemandeNomClasse::on_pushButton_clicked(){
-    emit envoyerNomClasse(ui->textNom->text());
-    close();
+    if (not(ui->textNom->text() == "")){
+        emit envoyerNomClasse(ui->textNom->text());
+        close();
+    }
 }
 

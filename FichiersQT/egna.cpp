@@ -1,8 +1,8 @@
 #include "egna.h"
 
 EGNA::EGNA(QVector<Module*> *modules_)
-    : graine(uint64_t()), etat{uint64_t()}, etatTmp{uint64_t()}, modules(modules_), moyenne(0.0), M2(0.0), cv(0.0), histogramme(QVector<unsigned int>(100,0)), autoCorrelation(0.0), equilibreBits(0.0), nbValeursActuel(0.0), nbValeursTotale(0){
-
+    : graine(uint64_t()), etat{uint64_t()}, etatTmp{uint64_t()}, modules(modules_), moyenne(0.0), M2(0.0), cv(0.0),
+    histogramme(QVector<unsigned int>(100,0)), autoCorrelation(0.0), equilibreBits(0.0), nbValeursActuel(0.0), nbValeursTotale(0){
 
     changerGraine(); // pour initialiser la graine
 }

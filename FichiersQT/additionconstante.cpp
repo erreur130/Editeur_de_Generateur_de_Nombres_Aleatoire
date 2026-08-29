@@ -63,7 +63,7 @@ void AdditionConstante::sauvegarder(QDataStream & out) const{
 
 void AdditionConstante::ecrireAlgo(QTextStream & out) const{
     out <<  "   {\n"
-            "       // addition d'une constante"
+            "       // addition d'une constante\n"
             "       uint64_t constante = " << constante << ";\n"
             "       uint64_t tmp = etat[1];\n"
             "       etat[1] += constante; // on fait l'addition\n"

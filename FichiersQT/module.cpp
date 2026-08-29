@@ -6,6 +6,8 @@
 #include "xorshiftgauche.h"
 #include "additionconstante.h"
 #include "multiplicationconstante.h"
+#include "nonlogique.h"
+#include "inversementbits.h"
 // Rajouter des #include si on rajoute des Modules -------------------------------------------------------------------------
 
 Module::Module(QObject* parent)
@@ -33,13 +35,12 @@ Module* Module::charger(QDataStream & in, QObject* parent){ // rajouter des cond
     else if (type == "MultiplicationConstante")
         return new MultiplicationConstante(parent, in);
 
-    /*
-    else if (type == "")
-        return new XXX(parent, in);
-    else if (type == "")
-        return new XXX(parent, in);
+    else if (type == "NonLogique")
+        return new NonLogique(parent);
 
-    */
+    else if (type == "InversementBits")
+        return new InversementBits(parent);
+
     qDebug() << "Type " << type << " est inconnu";
     return nullptr;
 }

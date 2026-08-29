@@ -10,6 +10,8 @@
 #include "xorshiftgauche.h"
 #include "additionconstante.h"
 #include "multiplicationconstante.h"
+#include "nonlogique.h"
+#include "inversementbits.h"
 // Rajouter des #include si on rajoute des Modules -------------------------------------------------------------------------
 
 QT_BEGIN_NAMESPACE
@@ -23,12 +25,14 @@ class MainWindow : public QMainWindow{
     QVector<Module*> *modulesActif;
     QVector<Module*> modulesParDefaut;
     EGNA editeur;
+    QString nomClasse;
+    QString cheminFichier;
 
     void afficherStats() const;
     void afficherListeModules() const;
     void miseAJourMethodesActives() const;
-
     void afficherBruit();
+    void sauvegarderFichiers() const;
 
 public:
     explicit MainWindow(QWidget *parent = nullptr);
@@ -42,8 +46,8 @@ private slots:
     void on_actionInfo_Projet_triggered();
     void on_textGraine_editingFinished();
     void on_spinBoxResolution_editingFinished();
-
     void on_boutonChangerGraine_clicked();
+    void on_actionSauvegarder_triggered();
 
 public slots:
     void miseAJourTout();

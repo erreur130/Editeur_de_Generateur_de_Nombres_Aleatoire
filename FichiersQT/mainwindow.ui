@@ -9,7 +9,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>912</width>
+    <width>949</width>
     <height>436</height>
    </rect>
   </property>
@@ -120,6 +120,9 @@
      <layout class="QVBoxLayout" name="verticalLayout_3">
       <item>
        <layout class="QHBoxLayout" name="horizontalLayout">
+        <property name="spacing">
+         <number>15</number>
+        </property>
         <item>
          <widget class="QLabel" name="label_3">
           <property name="text">
@@ -200,6 +203,9 @@
       </item>
       <item>
        <layout class="QHBoxLayout" name="horizontalLayout_2">
+        <property name="spacing">
+         <number>20</number>
+        </property>
         <item alignment="Qt::AlignmentFlag::AlignLeft">
          <widget class="QLabel" name="label_6">
           <property name="sizePolicy">
@@ -780,7 +786,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>912</width>
+     <width>949</width>
      <height>23</height>
     </rect>
    </property>
@@ -788,6 +794,7 @@
     <property name="title">
      <string>Fichier</string>
     </property>
+    <addaction name="actionSauvegarder"/>
     <addaction name="actionSauvegarder_sous"/>
     <addaction name="actionCharger"/>
    </widget>
@@ -826,6 +833,11 @@
   <action name="actionInfo_Projet">
    <property name="text">
     <string>Info Projet</string>
+   </property>
+  </action>
+  <action name="actionSauvegarder">
+   <property name="text">
+    <string>Sauvegarder</string>
    </property>
   </action>
  </widget>
