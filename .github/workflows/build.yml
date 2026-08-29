@@ -112,7 +112,7 @@ jobs:
         chmod +x linuxdeployqt
         cd build
         printf '[Desktop Entry]\nName=EGNA\nExec=EGNA\nIcon=EGNA\nType=Application\nCategories=Game;CardGame;\n' > EGNA.desktop
-        cp ../FichiersQT/Images/Love_Letter_icon.png EGNA.png
+        cp ../FichiersQT/Images/EGNA_icon.png EGNA.png
         APPIMAGE_EXTRACT_AND_RUN=1 ../linuxdeployqt EGNA -appimage -bundle-non-qt-libs
 
     - name: Package Linux
