@@ -1,0 +1,162 @@
+name: Build Qt (QMake) Multi-Platform
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-22.04
+            target: linux
+            qt-version: '6.11.1'
+          - os: windows-latest
+            target: windows
+            qt-version: '6.10.*'
+          - os: macos-latest
+            target: macos
+            qt-version: '6.11.1'
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Install Qt
+      uses: jurplel/install-qt-action@v4
+      with:
+        version: ${{ matrix.qt-version }}
+        target: desktop
+        setup-python: true
+        cache: true
+
+    - name: Setup MSVC
+      if: matrix.os == 'windows-latest'
+      uses: ilammy/msvc-dev-cmd@v1
+
+    - name: Configure (QMake)
+      shell: bash
+      run: |
+        mkdir build
+        cd build
+        qmake ../FichiersQT/FichiersQT.pro
+
+    - name: Remove AGL framework (macOS)
+      if: matrix.os == 'macos-latest'
+      run: |
+        sed -i '' 's/-framework AGL//g' build/Makefile
+        sed -i '' 's/-framework AGL//g' build/Makefile.Release 2>/dev/null || true
+        sed -i '' 's/-framework AGL//g' build/Makefile.Debug 2>/dev/null || true
+
+    - name: Build (Linux/macOS)
+      if: matrix.os != 'windows-latest'
+      run: |
+        cd build
+        make -j$(nproc 2>/dev/null || sysctl -n hw.ncpu)
+
+    - name: Build (Windows)
+      if: matrix.os == 'windows-latest'
+      shell: cmd
+      run: |
+        cd build
+        nmake
+
+    # --- DÉPLOIEMENT WINDOWS ---
+    - name: Deploy Windows
+      if: matrix.os == 'windows-latest'
+      shell: cmd
+      run: |
+        cd build\release
+        windeployqt EGNA.exe --release --compiler-runtime
+
+    - name: Clean release folder (Windows)
+      if: matrix.os == 'windows-latest'
+      shell: cmd
+      run: |
+        cd build\release
+        del *.obj *.cpp *.h *.res 2>nul
+
+    - name: Zip Windows build
+      if: matrix.os == 'windows-latest'
+      shell: pwsh
+      run: |
+        Compress-Archive -Path build\release\* -DestinationPath "build\EGNA-${{ github.ref_name }}-windows.zip"
+
+    # --- DÉPLOIEMENT MACOS ---
+    - name: Deploy macOS
+      if: matrix.os == 'macos-latest'
+      run: |
+        cd build
+        macdeployqt EGNA.app -dmg -always-overwrite
+        mv EGNA.dmg "EGNA-${{ github.ref_name }}-macos.dmg"
+
+    # --- DÉPLOIEMENT LINUX ---
+    - name: Install dependencies Linux
+      if: matrix.os == 'ubuntu-22.04'
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y libfuse2 patchelf
+
+    - name: Deploy Linux (AppImage)
+      if: matrix.os == 'ubuntu-22.04'
+      run: |
+        wget -O linuxdeployqt https://github.com/probonopd/linuxdeployqt/releases/download/continuous/linuxdeployqt-continuous-x86_64.AppImage
+        chmod +x linuxdeployqt
+        cd build
+        printf '[Desktop Entry]\nName=EGNA\nExec=EGNA\nIcon=EGNA\nType=Application\nCategories=Game;CardGame;\n' > EGNA.desktop
+        cp ../FichiersQT/Images/Love_Letter_icon.png EGNA.png
+        APPIMAGE_EXTRACT_AND_RUN=1 ../linuxdeployqt EGNA -appimage -bundle-non-qt-libs
+
+    - name: Package Linux
+      if: matrix.os == 'ubuntu-22.04'
+      run: |
+        cd build
+        chmod +x *.AppImage
+        mv *.AppImage "EGNA-${{ github.ref_name }}-linux.AppImage"
+        tar -czf "EGNA-${{ github.ref_name }}-linux.tar.gz" "EGNA-${{ github.ref_name }}-linux.AppImage"
+
+    - name: Upload Artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: ${{ matrix.target }}-build
+        retention-days: 5
+        path: |
+          build/EGNA-${{ github.ref_name }}-windows.zip
+          build/EGNA-${{ github.ref_name }}-macos.dmg
+          build/EGNA-${{ github.ref_name }}-linux.tar.gz
+
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/')
+
+    steps:
+    - name: Download all artifacts
+      uses: actions/download-artifact@v4
+      with:
+        path: artifacts/
+
+    - name: Create GitHub Release
+      uses: softprops/action-gh-release@v2
+      with:
+        name: "EGNA ${{ github.ref_name }}"
+        body: |
+          ## Téléchargement
+
+          - **Windows** : Télécharge `EGNA-${{ github.ref_name }}-windows.zip`, extrais et lance `EGNA.exe`
+          - **macOS** : Télécharge `EGNA-${{ github.ref_name }}-macos.dmg`, ouvre et glisse dans Applications
+          - **Linux** : Télécharge `EGNA-${{ github.ref_name }}-linux.tar.gz`, extrais et lance l'AppImage
+        files: |
+          artifacts/linux-build/EGNA-${{ github.ref_name }}-linux.tar.gz
+          artifacts/windows-build/EGNA-${{ github.ref_name }}-windows.zip
+          artifacts/macos-build/EGNA-${{ github.ref_name }}-macos.dmg
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
