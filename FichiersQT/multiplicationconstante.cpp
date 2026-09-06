@@ -31,7 +31,7 @@ void MultiplicationConstante::valeurSuivante(uint64_t (&val)[2]) const {
 
     uint64_t retenue = ((bas >> 32) + (m1 & 0xFFFFFFFFULL) + (m2 & 0xFFFFFFFFULL)) >> 32;
     val[1] = bas + (m1 << 32) + (m2 << 32); // les 64 premier bits
-    val[0] = haut + (m1 >> 32) + (m2 >> 32) + retenue; // les 64 dernier bits
+    val[0] = (val[0] * constante) + (haut + (m1 >> 32) + (m2 >> 32) + retenue); // les 64 dernier bits, + on addtitionne la multiplication de la partie haute et sur surplus de celle du bas
 
 }
 
@@ -91,7 +91,7 @@ void MultiplicationConstante::ecrireAlgo(QTextStream & out) const{
             "       uint64_t bas = etatBas * multBas;\n\n"
             "       uint64_t retenue = ((bas >> 32) + (m1 & 0xFFFFFFFFULL) + (m2 & 0xFFFFFFFFULL)) >> 32;\n"
             "       etat[1] = bas + (m1 << 32) + (m2 << 32); // les 64 premier bits\n"
-            "       etat[0] = haut + (m1 >> 32) + (m2 >> 32) + retenue; // les 64 dernier bits\n"
+            "       etat[0] = (etat[0] * constante) + (haut + (m1 >> 32) + (m2 >> 32) + retenue); // les 64 dernier bits, + on addtitionne la multiplication de la partie haute et sur surplus de celle du bas\n"
             "   }\n";
 }
 
