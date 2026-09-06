@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QFileDialog>
+#include <QMessageBox>
 #include "egna.h"
 #include "rotationbitsdroite.h"
 #include "rotationbitsgauche.h"
@@ -27,12 +28,14 @@ class MainWindow : public QMainWindow{
     EGNA editeur;
     QString nomClasse;
     QString cheminFichier;
+    bool modification;
 
     void afficherStats() const;
     void afficherListeModules() const;
     void miseAJourMethodesActives() const;
     void afficherBruit();
     void sauvegarderFichiers() const;
+    bool demanderSauvegrader();
 
 public:
     explicit MainWindow(QWidget *parent = nullptr);
@@ -48,16 +51,19 @@ private slots:
     void on_spinBoxResolution_editingFinished();
     void on_boutonChangerGraine_clicked();
     void on_actionSauvegarder_triggered();
+    void on_actionNouveau_triggered();
 
 public slots:
     void miseAJourTout();
     void recevoirNomClasse(QString);
     void recevoirIdModule(int idOrigine, int idCible, bool vientDeTemplate);
     void recevoirSuprimerModule(int idOrigine, bool vientDeTemplate);
+    inline void signalerModification(){modification = true;};
 
 private:
     Ui::MainWindow *ui;
 protected:
     void resizeEvent(QResizeEvent *event) override;
+    void closeEvent(QCloseEvent *event) override;
 };
 #endif // MAINWINDOW_H

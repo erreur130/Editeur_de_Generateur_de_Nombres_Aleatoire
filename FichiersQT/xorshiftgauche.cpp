@@ -52,6 +52,7 @@ QWidget* XorshiftGauche::creerPaneauParametres(){
     connect(nbDecalage, &QSpinBox::editingFinished, this, &XorshiftGauche::changerDecalage);
     // connect spinBox -> MainWindow
     connect(nbDecalage, &QSpinBox::editingFinished, qobject_cast<MainWindow*>(parent()), &MainWindow::miseAJourTout);
+    connect(nbDecalage, &QSpinBox::editingFinished, qobject_cast<MainWindow*>(parent()), &MainWindow::signalerModification);
     layoutVerticale->setContentsMargins(5, 5, 5, 0);
 
     // on répartie les Wiget dans les layouts

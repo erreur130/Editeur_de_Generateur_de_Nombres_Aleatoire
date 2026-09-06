@@ -9,7 +9,7 @@
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
-    , modulesActif(new QVector<Module*>), modulesParDefaut(QVector<Module*>()), editeur(EGNA(modulesActif)), nomClasse(""), cheminFichier(""), ui(new Ui::MainWindow){
+    , modulesActif(new QVector<Module*>), modulesParDefaut(QVector<Module*>()), editeur(EGNA(modulesActif)), nomClasse(""), cheminFichier(""), modification(false), ui(new Ui::MainWindow){
     ui->setupUi(this);
 
     setWindowTitle("Editeur de Générateur de Nombres Aléatoires");
@@ -62,6 +62,30 @@ void MainWindow::resizeEvent(QResizeEvent *event){
         int tailleMin = qMin(ui->layoutImage->geometry().height(),ui->layoutImage->geometry().width());
         ui->imageBruit->setFixedSize(QSize(tailleMin - 10, tailleMin - 10));
     });
+}
+
+void MainWindow::closeEvent(QCloseEvent *event){
+    if (demanderSauvegrader()) // sauvegrade si nécessaire
+        on_actionSauvegarder_triggered();
+    event->accept(); // ferme normalement
+}
+
+bool MainWindow::demanderSauvegrader(){
+    if (modification){ // si modification alors on demande
+        QMessageBox::StandardButton reponse = QMessageBox::question(
+            this,
+            "Confirmation",
+            "Voulez-vous quitter sans sauvegrader ? Les modifications non sauvegardées seront perdues.",
+            QMessageBox::Save | QMessageBox::Cancel
+        );
+
+        if (reponse == QMessageBox::Save){ // si il veut sauvegrader
+            return true;
+        } else { // si il ne veut pas sauvegrader
+            return false;
+        }
+    } // si il n'y a pas eu de modif, pas besoin de demander
+    return false;
 }
 
 void MainWindow::afficherStats() const {
@@ -190,6 +214,10 @@ void MainWindow::on_actionSauvegarder_sous_triggered(){
 }
 
 void MainWindow::on_actionCharger_triggered(){
+    if (demanderSauvegrader()) // si il veut sauvegrader avant de charger
+        on_actionSauvegarder_triggered();
+        // puis continue
+
     QString nomFichier = QFileDialog::getOpenFileName( // permet de chercher un fichier
         0,
         "Gestionaire des fichiers",
@@ -223,6 +251,7 @@ void MainWindow::on_actionCharger_triggered(){
         // update
         miseAJourMethodesActives();
         miseAJourTout();
+        modification = false; // on considere qu'il n'y a pas eu de changement
     }
 }
 
@@ -259,7 +288,19 @@ void MainWindow::on_actionSauvegarder_triggered(){
         on_actionSauvegarder_sous_triggered();
     } else {
         sauvegarderFichiers(); // si pas de changement de path ni de nom de classe
+        modification = false; // on considere qu'il n'y a pas eu de changement
     }
+}
+
+void MainWindow::on_actionNouveau_triggered(){
+    if (demanderSauvegrader()) // demande la sauvegrade si nécessaire
+        on_actionSauvegarder_triggered();
+    // On vide tout
+    cheminFichier = nomClasse = "";
+    modulesActif->clear();
+    miseAJourMethodesActives();
+    miseAJourTout();
+    modification = false; // on considere qu'il n'y a pas eu de changement
 }
 
 void MainWindow::sauvegarderFichiers() const{
@@ -416,6 +457,7 @@ void MainWindow::recevoirNomClasse(QString nomClasse_){
     cheminFichier = chemin;
 
     sauvegarderFichiers();
+    modification = false; // on considere qu'il n'y a pas eu de changement
 }
 
 void MainWindow::recevoirIdModule(int idOrigine, int idCible, bool vientDeTemplate){
@@ -429,6 +471,7 @@ void MainWindow::recevoirIdModule(int idOrigine, int idCible, bool vientDeTempla
     // update
     miseAJourMethodesActives();
     miseAJourTout();
+    modification = true; // on considere qu'il y eu un changement
 }
 
 void MainWindow::recevoirSuprimerModule(int idOrigine, bool vientDeTemplate){
@@ -437,5 +480,6 @@ void MainWindow::recevoirSuprimerModule(int idOrigine, bool vientDeTemplate){
         // update
         miseAJourMethodesActives();
         miseAJourTout();
+        modification = true; // on considere qu'il y eu un changement
     }
 }

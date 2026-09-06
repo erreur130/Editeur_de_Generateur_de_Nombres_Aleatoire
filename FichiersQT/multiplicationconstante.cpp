@@ -58,6 +58,7 @@ QWidget* MultiplicationConstante::creerPaneauParametres(){
     connect(nbConstante, &QLineEdit::editingFinished, this, &MultiplicationConstante::changerConstante);
     // connect spinBox -> MainWindow
     connect(nbConstante, &QLineEdit::editingFinished, qobject_cast<MainWindow*>(parent()), &MainWindow::miseAJourTout);
+    connect(nbConstante, &QLineEdit::editingFinished, qobject_cast<MainWindow*>(parent()), &MainWindow::signalerModification);
     layoutVerticale->setContentsMargins(5, 5, 5, 0);
 
     // on répartie les Wiget dans les layouts
